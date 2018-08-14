@@ -1,18 +1,34 @@
 function atomoSpell() {
     word = document.getElementById("word").value;
-    len = document.getElementById("len").value;
-    httpGetAsync("api.php?word="+word+"&len="+2, function(response) {
-        var elements = JSON.parse(response);
-        var spelled = "";
-        for (var el in elements.component) {
-            spelled = spelled + " " + elements.component[el].title;
+    //len = document.getElementById("len").value;
+    responseHTML = "";
+    httpGetAsync("api.php?q="+word, function(response) {
+        var thisResponse = JSON.parse(response);
+
+        for (var wordId in thisResponse.wordlist) {
+            queryWord = thisResponse.wordlist[wordId].query;
+            responseHTML = responseHTML + "<div class=\"suggestion\"><h2>Queried word: " + queryWord + "</h2><br>\n";
+
+            for (suggestionsId in thisResponse.wordlist[wordId].suggestions) {
+
+                thisSuggestion = thisResponse.wordlist[wordId].suggestions[suggestionsId].suggestion;
+                elementsHTML = "";
+                for (var el in thisResponse.wordlist[wordId].suggestions[suggestionsId].elements) {
+                    elementsHTML = elementsHTML + " <img src=" + thisResponse.wordlist[wordId].suggestions[suggestionsId].elements[el].url + ">";
+                }
+
+            responseHTML = responseHTML + "&nbsp;<b>Suggestion " + suggestionsId + ":</b> " + thisSuggestion + "<br>\n";
+            responseHTML = responseHTML + "&nbsp;" + elementsHTML + "<br>\n";
+
+            }
+
+            responseHTML = responseHTML + "</div>\n";
+
         }
-        spelled = spelled + "<br>\n";
-        for (var el in elements.component) {
-            spelled = spelled + " <img src=" + elements.component[el].image.url + ">";
-        }
-        document.getElementById("spelled").innerHTML = spelled;
-        console.log(elements);
+
+        // display the result
+        document.getElementById("spelled").innerHTML = responseHTML;
+        //console.log(responseHTML);
     });
 }
 
