@@ -5,7 +5,7 @@ $foundElementArray = array();
 $elementedWordArray = array();
 $jsonElementArray = array();
 $wordQuery = $_GET["q"]; // query
-//$lengthPref = $_GET['len']; // 1 ou 2
+$lengthPref = 2;
 $lengthOrder = array(2, 1);
 
 // affiche la page
@@ -16,56 +16,60 @@ if ($wordQuery != null) {
     $db = connectDB();
 
     // recupère le liste des elements
-    $elementList = getSymbolsFromDB($db);
+    $elementsList = getElementsFromDB($db);
+    $symbolsList = getSymbolsFromDB($db);
 
-    $solvable = true;
     //echo "<h1 style='margin-top: 1em'>";
 
     // crée une table avec chaque mot entrée
     $words = preg_replace('/[\W]+/', '', explode(' ', $wordQuery));
 
-    foreach($lengthOrder as $lengthPref) {
-        foreach ($words as $i => $word) {
-//print("word:".$word."<br>\n");
-            $found = searchElementFromHead($word, $elementList, $lengthPref, $foundElementArray);
-            $elementedWordArrayByLength[$lengthPref][$word] = $foundElementArray;
-            $elementedWordArrayByWord[$word][$lengthPref] = $foundElementArray;
+    foreach ($words as $i => $word) {
+        foreach($lengthOrder as $lengthPref) {
+
+            //$found = searchElementFromHead($word, $elementList, $lengthPref, $foundElementArray);
+            //$elementedWordArrayByLength[$lengthPref][$word] = $foundElementArray;
             $foundElementArray = array();
-//print_r($foundElementArray);
+            $endOfWord = searchElement($word, $lengthPref);
+            $elementedWordArrayByWord[$word]["all"][$lengthPref] = $foundElementArray;
+
         }
+
+        // which foundElement is the shortest for current word?
+        if (count($elementedWordArrayByWord[$word]["all"][2]) <= count($elementedWordArrayByWord[$word]["all"][1]))
+            $elementedWordArrayByWord[$word]["shortest"] = $elementedWordArrayByWord[$word]["all"][2];
+        else
+            $elementedWordArrayByWord[$word]["shortest"] = $elementedWordArrayByWord[$word]["all"][1];
     }
 
-//    print_r($elementedWordArrayByLength);
-//    print_r($elementedWordArrayByWord);
-//    print("<br>\n");
-
     foreach ($elementedWordArrayByWord as $thisWord => $thisWordArray) {
-//print("Word: ".$thisWord."<br>\n");
+
         $thisEntry = array(
             "query" => $thisWord,
-            "suggestions" => array()
+            "suggestionList" => array()
         );
-        foreach ($thisWordArray as $thisLength => $thisElementArray) {
+
+        //foreach ($thisWordArray as $thisLength => $thisElementArray) {
+        $thisElementArray = $thisWordArray["shortest"];
 
             $thisImageArray = array();
             foreach ($thisElementArray as $thisImage) {
                 $thisImageArray[] = array(
                     "symbol" => $thisImage,
-                    "url" => "img.php?e=".$thisImage
+                    "number" => array_searchi($thisImage, $symbolsList),
+                    "url" => "img.php?e=".$thisImage."&w=128"
                 );
             }
 
-            $thisEntry["suggestions"][] = array(
+            $thisEntry["suggestionList"][] = array(
                 "suggestion" => implode($thisElementArray),
-                "preferedlength" => $thisLength,
-                "elements" => $thisImageArray
+                "elementList" => $thisImageArray
             );
-        }
+        //}
+
         array_push($elementedWordArray, $thisEntry);
     }
     $jsonElementArray = $elementedWordArray;
-
-//print_r($elementedWordArray);
 
     $asset = array(
         "query" => $words,
@@ -76,17 +80,17 @@ if ($wordQuery != null) {
             "website" => array(
                 array(
                     "name" => "ATO main",
-                    "url" => "https://app.bookoforbs.com/ato"
+                    "url" => "https://app.bookoforbs.com/ato/"
                 ),
                 array(
                     "name" => "ATO market",
-                    "url" => "https://app.bookoforbs.com/ato/LATOMONA/market/"
+                    "url" => "https://app.bookoforbs.com/ato/"
                 ),
             ),
             "social" => array(
                 array(
                     "name" => "facebook",
-                    "url" => "https://www.facebook.com/blockchainizator"
+                    "url" => "https://www.facebook.com/blockchainizator/"
                 ),
                 array(
                     "name" => "twitter",
