@@ -9,15 +9,15 @@ function atomoSpell() {
             queryWord = thisResponse.wordlist[wordId].query;
             responseHTML = responseHTML + "<div class=\"suggestion\"><h2>Queried word: " + queryWord + "</h2><br>\n";
 
-            for (suggestionsId in thisResponse.wordlist[wordId].suggestions) {
+            for (suggestionsId in thisResponse.wordlist[wordId].suggestionList) {
 
-                thisSuggestion = thisResponse.wordlist[wordId].suggestions[suggestionsId].suggestion;
+                thisSuggestion = thisResponse.wordlist[wordId].suggestionList[suggestionsId].suggestion;
                 elementsHTML = "";
-                for (var el in thisResponse.wordlist[wordId].suggestions[suggestionsId].elements) {
-                    elementsHTML = elementsHTML + " <img src=" + thisResponse.wordlist[wordId].suggestions[suggestionsId].elements[el].url + ">";
+                for (var el in thisResponse.wordlist[wordId].suggestionList[suggestionsId].elementList) {
+                    elementsHTML = elementsHTML + " <img src=" + thisResponse.wordlist[wordId].suggestionList[suggestionsId].elementList[el].url + ">";
                 }
 
-            responseHTML = responseHTML + "&nbsp;<b>Suggestion " + suggestionsId + ":</b> " + thisSuggestion + "<br>\n";
+            responseHTML = responseHTML + "&nbsp;<b>Suggestion :</b> " + thisSuggestion + "<br>\n";
             responseHTML = responseHTML + "&nbsp;" + elementsHTML + "<br>\n";
 
             }
