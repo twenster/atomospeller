@@ -7,7 +7,7 @@ function atomoSpell() {
 
         for (var wordId in thisResponse.wordlist) {
             queryWord = thisResponse.wordlist[wordId].query;
-            responseHTML = responseHTML + "<div class=\"suggestion\"><h2>Queried word: " + queryWord + "</h2><br>\n";
+            //responseHTML = responseHTML + "<div class=\"suggestion\"><h2>Queried word: " + queryWord + "</h2><br>\n";
 
             for (suggestionsId in thisResponse.wordlist[wordId].suggestionList) {
 

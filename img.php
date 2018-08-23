@@ -27,6 +27,8 @@ if ($symbolId) {
 
 $path = __DIR__ . DIRECTORY_SEPARATOR . "p/512/";
 $filename = $info["number"] . "atomo" . strtolower($info["symbol"]) . "512.png";
+//print ($path.$filename);
+
 $img = @imagecreatefrompng($path.$filename);
 
 if (!$img) {

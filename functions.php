@@ -24,12 +24,15 @@ function getElement($string, &$array) {
 }
 
 function getElementsFromDB($db) {
-//    return array_map('current', $db->query('SELECT symbol, name, number FROM elements')->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC));
-    return $db->query('SELECT symbol, name, number FROM elements')->fetchAll();
+    $result = $db->query('SELECT symbol, name, number FROM elements')->fetchAll();
+    array_unshift($result, "dummy");
+    return $result;
 }
 
 function getSymbolsFromDB($db) {
-    return $db->query('SELECT symbol FROM elements')->fetchAll(PDO::FETCH_COLUMN);
+    $result = $db->query('SELECT symbol FROM elements')->fetchAll(PDO::FETCH_COLUMN);
+    array_unshift($result, "dummy");
+    return $result;
 }
 
 // setter
