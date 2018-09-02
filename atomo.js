@@ -1,6 +1,5 @@
 function atomoSpell() {
     word = document.getElementById("word").value;
-    //len = document.getElementById("len").value;
     responseHTML = "";
     httpGetAsync("api.php?q="+word, function(response) {
         var thisResponse = JSON.parse(response);
@@ -18,6 +17,38 @@ function atomoSpell() {
                 }
 
             responseHTML = responseHTML + "&nbsp;<b>Suggestion :</b> " + thisSuggestion + "<br>\n";
+            responseHTML = responseHTML + "&nbsp;" + elementsHTML + "<br>\n";
+
+            }
+
+            responseHTML = responseHTML + "</div>\n";
+
+        }
+
+        // display the result
+        document.getElementById("spelled").innerHTML = responseHTML;
+        //console.log(responseHTML);
+    });
+}
+
+function atomoSpell2() {
+    word = document.getElementById("word").value;
+    responseHTML = "";
+    httpGetAsync("api2.php?q="+word, function(response) {
+        var thisResponse = JSON.parse(response);
+        //console.log(thisResponse);
+        for (var queryWordId in thisResponse) {
+            //responseHTML = responseHTML + "<div class=\"suggestion\"><h2>Queried word: " + queryWord + "</h2><br>\n";
+
+            for (spellingsId in thisResponse[queryWordId]["all"]) {
+
+                elementalWord = thisResponse[queryWordId]["all"][spellingsId]["elemental_word"];
+                elementsHTML = "";
+                for (var element in thisResponse[queryWordId]["all"][spellingsId]["elements"]) {
+                    elementsHTML = elementsHTML + " <img src=" + thisResponse[queryWordId]["all"][spellingsId]["elements"][element]["url"] + ">";
+                }
+
+            responseHTML = responseHTML + "&nbsp;<b>Suggestion :</b> " + elementalWord + "<br>\n";
             responseHTML = responseHTML + "&nbsp;" + elementsHTML + "<br>\n";
 
             }

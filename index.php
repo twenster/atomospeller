@@ -2,7 +2,6 @@
 <html>
     <head>
         <title>At O Mo speller</title>
-        <script type="text/javascript" src="atomo.js"></script>
         <style type="text/css">
             .headerWrapper {
                 text-align: center;
@@ -37,13 +36,21 @@
         </div>
         <div class="formWrapper">
             <div class="form">
-                <input type="text" id="word">
-                <input type="hidden" id="len" value="2">
-                <button onclick="atomoSpell()" id="lookup">Look up</button>
+                <input type="text" id="word" name="word">
+                <button onclick="atomoSpell2()" id="lookup">Look up</button>
             </div>
         </div>
         <div id="spelled">
 
         </div>
     </body>
+    <script type="text/javascript" src="atomo.js"></script>
+    <script type="text/javascript">
+        document.getElementById("word").addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                document.getElementById("lookup").click();
+            }
+        });
+    </script>
 </html>
