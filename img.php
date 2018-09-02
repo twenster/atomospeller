@@ -25,7 +25,7 @@ if ($symbolId) {
     );
 }
 
-$path = __DIR__ . DIRECTORY_SEPARATOR . "p/512/";
+$path = __DIR__ . DIRECTORY_SEPARATOR . "../f/atomo/p/512/";
 $filename = $info["number"] . "atomo" . strtolower($info["symbol"]) . "512.png";
 //print ($path.$filename);
 
