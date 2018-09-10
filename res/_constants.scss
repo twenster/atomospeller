@@ -1,0 +1,159 @@
+/**
+ * @file
+ * Main common SASS Style sheet.
+ *
+ * This is the constant definitions.
+ */
+
+/* Screen sizes */
+/* Standford standard
+320px
+480px
+468px
+980px
+1200px
+*/
+/* PureCSS standard
+1em = 16px
+sm >=568px (35.5em)
+lg >=1024px (64em)
+md >=768px (48em)
+xl >=1280px (80em)
+*/
+/* Bootstrap standard
+xs <768px
+sm >=768px
+md >=992px
+lg >=1200px
+*/
+
+/* Sizes */
+$page-max-width:  1200px;
+$page-min-width:  640px;
+$header-height:   63px;
+
+$pure-u-padding:  1em;
+
+$bs-grid-margin:  15px;
+$bs-grid-content: 70px;
+$bs-grid-col: $bs-grid-content + 2 * $bs-grid-margin;
+
+/* Colours */
+
+/* Red
+*/
+$red:                   rgb(255, 0, 0);
+
+/* Black
+   Pantone: Process Black C
+   CMYK: K 100%
+   RGB: 0%, 0%, 0%
+   RGB: 0, 0, 0
+*/
+$black:                 rgb(0, 0, 0);
+$almostBlack:           lighten($black, 5%);
+
+/* Grey 80% black */
+$greyDark:              rgb(50, 50, 50);
+$greyDarker:            darken($greyDark, 10%);
+
+/* Middle grey */
+$grey50:                rgb(127, 127, 127);
+$grey60:                darken($grey50, 10%);
+$grey40:                lighten($grey50, 10%);
+
+/* Grey 25% black */
+$greyLight:             rgb(192, 192, 192);
+$greyLighter:           lighten($greyLight, 10%);
+
+$white:                 rgb(255, 255, 255);
+$almostWhite:           darken($white, 5%);
+
+// http://encycolorpedia.com/faf0e6
+// CMYK: 0, 4, 8 1.96
+// RGB: 98.04%, 94.12%, 90.2%
+// RGB: #faf0e6;
+$linen:                 rgb(250, 240, 230);
+
+// Accent colors
+// -------------------------
+$blue:                  #049CDB;
+$blueDark:              #0064CD;
+$green:                 #46A546;
+$red:                   #F60000;
+$yellow:                #FFC40D;
+$orange:                #F89406;
+$pink:                  #C3325F;
+$purple:                #7A43B6;
+
+/*
+// Links
+// -------------------------
+$linkColor:             $red;
+$linkColorHover:        darken($linkColor, 15%);
+*/
+
+$warning-background:    #FFFFDD;
+$warning-border:        #F0C020;
+$warning-colour:        #222200;
+
+$status-background:     #E6FEE6;
+$status-border:         #30BF30;
+$status-colour:         #002222;
+
+// Typography
+// -------------------------
+$sansFontFamily:        "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$serifFontFamily:       Georgia, "Times New Roman", Times, serif;
+$monoFontFamily:        Monaco, Menlo, Consolas, "Courier New", monospace;
+
+$baseFontSize:          14px;
+$baseFontFamily:        $sansFontFamily;
+$baseLineHeight:        20px;
+$altFontFamily:         $serifFontFamily;
+
+/* $box = { border-box | content-box } */
+@mixin boxsizing($box) {
+  -moz-box-sizing: $box;
+  -ms-box-sizing: $box;
+  -webkit-box-sizing: $box;
+  box-sizing: $box;
+}
+
+@mixin coverbackground() {
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+
+}
+
+@mixin containbackground() {
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  -webkit-background-size: contain;
+  background-size: contain;
+
+}
+
+@mixin roundcorner($radius) {
+  -moz-border-radius: $radius;
+  -ms-box-sizing: $radius;
+  -webkit-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin opacity($value){
+  $IEValue: $value*100;
+  opacity: $value;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity="+$IEValue+")";
+  filter: alpha(opacity=$IEValue);
+}
+
+@mixin transition($transition-property, $transition-time, $method) {
+  -webkit-transition: $transition-property $transition-time $method;
+  -moz-transition: $transition-property $transition-time $method;
+  -ms-transition: $transition-property $transition-time $method;
+  -o-transition: $transition-property $transition-time $method;
+  transition: $transition-property $transition-time $method;
+}

@@ -1,0 +1,64 @@
+/**
+ * @file
+ * Main Style sheet for all site.
+ *
+ * This is the main stylesheet to be used for all website.
+ * Use it and override the rule in your own stylesheet file.
+ */
+
+@import "_commons.scss";
+
+.atomo-page-wrapper {
+    margin: 0 auto;
+    max-width: $page-max-width;
+}
+
+.atomo-header-wrapper {
+    text-align: center;
+    margin: 2em 0;
+
+    .atomo-header {
+            display: inline-block;
+            font-size: 2.0em;
+    }
+}
+.atomo-superscript {
+    color: #ff0000;
+    font-size: .42em;
+    vertical-align: super;
+}
+
+.atomo-form-wrapper {
+    margin: 2em 0;
+    text-align: center;
+
+    .atomo-form {
+        display: inline-block;
+
+        .atomo-word {
+            font-size: 1.6em;
+        }
+        .atomo-lookup {
+            font-size: 1.6em;
+        }
+    }
+}
+
+.atomo-results-wrapper {
+    .atomo-results {
+        margin: 1em;
+    }
+}
+
+footer {
+    top: 1em;
+    right: 1em;
+    background-color: #eeeeee;
+    color: #444444;
+    position: absolute;
+    padding: 0.5em;
+    width: 300px;
+}
+.atomo-disclaimer {
+    position: relative;
+}

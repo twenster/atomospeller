@@ -1,0 +1,63 @@
+/**
+ * @file
+ * Main common Style sheet for all site.
+ *
+ * This is the main stylesheet to be used for all website.
+ * Use it and override the rule in your own stylesheet file.
+ */
+
+@import "_constants.scss";
+
+/* HTML5 compatibility */
+header, footer, nav, section, aside { display:block; }
+
+/* PureCSS override */
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"] {
+    font-family: $sansFontFamily;
+}
+
+body {
+  background-color: $white;
+}
+
+/**
+ * Common rules
+ */
+a {
+  color: $grey60;
+  text-decoration: none;
+}
+a:hover{
+  color: $red;
+  text-decoration: underline;
+}
+a:link, a:visited {
+  color: $grey60;
+}
+h1, h2, h3, h4 {
+  color: $grey60;
+}
+
+h1.title {
+  border-bottom: 1px solid #ccc;
+  clear: left;
+  font-family: inherit;
+  font-size: 1.6em;
+  font-weight: bold;
+  line-height: 1.272em;
+  width: auto;
+}
+
+h2.title {
+  font-size: 1.6em;
+  line-height: 1.6em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.pre {
+  font-family: monospace;
+  /*white-space: pre-wrap;*/
+  word-wrap: break-word;
+}
