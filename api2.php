@@ -3,6 +3,7 @@ require("functions.php");
 require("stoichiograph.php");
 
 $wordQuery = $_GET["q"]; // query
+//$length = $_GET["l"]; // length (all, shortest)
 
 if ($wordQuery != null) {
     $db = connectDB();
@@ -59,9 +60,9 @@ if ($wordQuery != null) {
             $spelled_words[ $words[$word_key] ]["all"][$path_id]["elemental_word"] = "";
             $spelled_words[ $words[$word_key] ]["all"][$path_id]["elements"] = array();
 
-            $spelled_words[ $words[$word_key] ]["shortest"][$path_id] = array(); // path x
-            $spelled_words[ $words[$word_key] ]["shortest"][$path_id]["elemental_word"] = "";
-            $spelled_words[ $words[$word_key] ]["shortest"][$path_id]["elements"] = array();
+            //$spelled_words[ $words[$word_key] ]["shortest"][$path_id] = array(); // path x
+            //$spelled_words[ $words[$word_key] ]["shortest"][$path_id]["elemental_word"] = "";
+            //$spelled_words[ $words[$word_key] ]["shortest"][$path_id]["elements"] = array();
 
             foreach ($paths as $node) {
 //print("node: ".$node."<br>");
@@ -76,7 +77,7 @@ if ($wordQuery != null) {
 
             if (count($paths) < $shortest_length) {
                 $shortest_length = count($paths);
-                $spelled_words[ $words[$word_key] ]["shortest"][$path_id] = $spelled_words[ $words[$word_key] ]["all"][$path_id];
+                $spelled_words[ $words[$word_key] ]["shortest"][0] = $spelled_words[ $words[$word_key] ]["all"][$path_id];
             }
 
 //print("<br>\n".implode("-", $spelled_word[$word_key])."<br>\n");
