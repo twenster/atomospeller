@@ -33,19 +33,22 @@ function atomoSpell() {
 
 function atomoSpell2() {
     word = document.getElementById("word").value;
+    length = document.getElementsByName("length").value;
     responseHTML = "";
-    httpGetAsync("api2.php?q="+word, function(response) {
+    httpGetAsync("api2.php?q="+word+"&l="+length, function(response) {
         var thisResponse = JSON.parse(response);
-        //console.log(thisResponse);
+
+        queryLength = (document.querySelector('input[name="length"]:checked').value==1) ? "shortest" : "all";
+        console.log("length="+queryLength);
         for (var queryWordId in thisResponse) {
             //responseHTML = responseHTML + "<div class=\"suggestion\"><h2>Queried word: " + queryWord + "</h2><br>\n";
 
-            for (spellingsId in thisResponse[queryWordId]["all"]) {
+            for (spellingsId in thisResponse[queryWordId][queryLength]) {
 
-                elementalWord = thisResponse[queryWordId]["all"][spellingsId]["elemental_word"];
+                elementalWord = thisResponse[queryWordId][queryLength][spellingsId]["elemental_word"];
                 elementsHTML = "";
-                for (var element in thisResponse[queryWordId]["all"][spellingsId]["elements"]) {
-                    elementsHTML = elementsHTML + " <img src=" + thisResponse[queryWordId]["all"][spellingsId]["elements"][element]["url"] + ">";
+                for (var element in thisResponse[queryWordId][queryLength][spellingsId]["elements"]) {
+                    elementsHTML = elementsHTML + " <img src=" + thisResponse[queryWordId][queryLength][spellingsId]["elements"][element]["url"] + ">";
                 }
 
             responseHTML = responseHTML + "&nbsp;<b>Suggestion :</b> " + elementalWord + "<br>\n";
