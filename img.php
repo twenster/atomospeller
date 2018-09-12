@@ -1,47 +1,61 @@
 <?PHP
 require 'functions.php';
 
-$element = $_GET["e"];
-$elementWidth = $_GET["w"];
-if ( ($elementWidth == 0) || ($elementWidth == "") ) $elementWidth = 512;
-
 $db = connectDB();
-$symbolList = getSymbolsFromDB($db);
+$dbSymbolList = getSymbolsFromDB($db);
+$sourceElementWidth = 512;
+$sourceElementPath = __DIR__ . DIRECTORY_SEPARATOR . "../f/atomo/p/512/";
+$requestedElementList = json_decode( $_GET["s"] );
+$requestedElementWidth = $_GET["w"];
+if ( ($requestedElementWidth == 0) || ($requestedElementWidth == "") )
+    $requestedElementWidth = 128;
 
-$symbolId = array_searchi($element, $symbolList);
+//$requestedElementList = array("Ni", "Co", "La", "S");
 
-if ($symbolId) {
-    $elementList = getElementsFromDB($db);
-    $info = array(
-        "symbol" => $elementList[$symbolId]["symbol"],
-        "name" => $elementList[$symbolId]["name"],
-        "number" => substr( "00" . $elementList[$symbolId]["number"], -3)
-    );
-} else {
-    $info = array(
-        "symbol" => "XX",
-        "name" => "Unknown",
-        "number" => 0
-    );
+
+// create the final image canvas.
+// We will copy/merge image to this new image and build a word
+$wordImage = imagecreatetruecolor(count($requestedElementList) * $sourceElementWidth, $sourceElementWidth);
+
+// Transparent background (PNG)
+imagesavealpha($wordImage, true);
+$trans_colour = imagecolorallocatealpha($wordImage, 0, 0, 0, 127);
+imagefill($wordImage, 0, 0, $trans_colour);
+
+// Compose the new image,
+// Adds each element from the array to the image canvas
+foreach ($requestedElementList as $elementPosition => $requestedElement) {
+    $symbolId = array_searchi($requestedElement, $dbSymbolList);
+
+    // if the requestedElement exists in the Element from the database,
+    // We load the image file, or we create an empty one
+    if ( $symbolId ) {
+        $elementListDB = getElementsFromDB($db);
+        $sourceElementFilename = substr( "00" . $elementListDB[$symbolId]["number"], -3) . "atomo" . strtolower($elementListDB[$symbolId]["symbol"]) . "512.png";
+        $requestedElementImage = @imagecreatefrompng($sourceElementPath.$sourceElementFilename);
+    } else {
+        $requestedElementImage = createLocalImage( array(
+            "symbol" => "XX",
+            "name" => "Unknown",
+            "number" => 0
+            )
+        );
+    }
+
+    // copy the element image to our own image.
+    // in this case imagecopymerge() = imagecopy() because of the last parameter = 100
+    $r = imagecopymerge($wordImage, $requestedElementImage, $elementPosition * $sourceElementWidth, 0, 0, 0, $sourceElementWidth, $sourceElementWidth, 100);
 }
 
-$path = __DIR__ . DIRECTORY_SEPARATOR . "../f/atomo/p/512/";
-$filename = $info["number"] . "atomo" . strtolower($info["symbol"]) . "512.png";
-//print ($path.$filename);
-
-$img = @imagecreatefrompng($path.$filename);
-
-if (!$img) {
-    $img = createLocalImage($info);
-}
-
-$imgscaled = imagescale($img, $elementWidth, $elementWidth, IMG_BICUBIC);
+// Resize the image to the size given in the URL
+$wordImageScaled = imagescale($wordImage, count($requestedElementList) * $requestedElementWidth, $requestedElementWidth, IMG_BICUBIC);
 
 header('Content-type:image/png');
-imagepng($imgscaled);
+imagepng($wordImageScaled);
+//imagepng($wordImage);
 
-imagedestroy($img);
-imagedestroy($imgscaled);
+imagedestroy($wordImage);
+imagedestroy($wordImageScaled);
 
 function createLocalImage($info) {
     print_r($info);
@@ -64,8 +78,8 @@ function createLocalImage($info) {
     $white = imagecolorallocate($img, 230, 230, 230);
     $black = imagecolorallocate($img, 25, 25, 25);
 
-    $font = __DIR__ . DIRECTORY_SEPARATOR . "Lato-Regular.ttf";
-    $symbolfont = __DIR__ . DIRECTORY_SEPARATOR . "Lato-Bold.ttf";
+    $font = __DIR__ . DIRECTORY_SEPARATOR . "res/Lato-Regular.ttf";
+    $symbolfont = __DIR__ . DIRECTORY_SEPARATOR . "res/Lato-Bold.ttf";
 
     // outer borders
     imageline($img, 0, 0, $BOX_WIDTH, 0, $black); // top

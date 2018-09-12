@@ -8,40 +8,32 @@ document.getElementById("word").addEventListener("keyup", function(event) {
 function atomoSpell2() {
     word = document.getElementById("word").value;
     length = document.getElementsByName("length").value;
+    imgWidth = 128;
     responseHTML = "";
     httpGetAsync("api2.php?q="+word+"&l="+length, function(response) {
         var thisResponse = JSON.parse(response);
+        var queryLength = (document.querySelector('input[name="length"]:checked').value==1) ? "shortest" : "all";
 
-        queryLength = (document.querySelector('input[name="length"]:checked').value==1) ? "shortest" : "all";
-        console.log("length="+queryLength);
         for (var queryWordId in thisResponse) {
-            //responseHTML = responseHTML + "<div class=\"pure-u-1-1 atomo-results\">Query:";
-
             for (spellingsId in thisResponse[queryWordId][queryLength]) {
-
-                elementalWord = thisResponse[queryWordId][queryLength][spellingsId]["elemental_word"];
-                elementsHTML = "";
-                for (var element in thisResponse[queryWordId][queryLength][spellingsId]["elements"]) {
-                    elementsHTML = elementsHTML + "<img src=" + thisResponse[queryWordId][queryLength][spellingsId]["elements"][element]["url"] + ">";
-                }
-
-                //responseHTML = responseHTML + "&nbsp;<b>Suggestion :</b> " + elementalWord + "<br>\n";
-                responseHTML = responseHTML + "<div class=\"pure-u-1-1 atomo-results\">" + elementsHTML + "</div>\n";
-
+                symbolList = thisResponse[queryWordId][queryLength][spellingsId]["symbols"];
+                elemental_word = thisResponse[queryWordId][queryLength][spellingsId]["elemental_word"];
+                responseHTML = responseHTML
+                             + "<div class=\"pure-u-1-1 atomo-results\">"
+                             + "<img src='img.php?s=" + JSON.stringify(symbolList) + "&w=" + imgWidth + "' alt='"+elemental_word+"'>"
+                             + "</div>\n";
             }
-
             responseHTML = responseHTML + "</div>\n";
-
         }
 
         // display the result
         document.getElementById("spelled").innerHTML = responseHTML;
-        //console.log(responseHTML);
     });
 }
 
 function httpGetAsync(theUrl, callback) {
   var xmlHttp = new XMLHttpRequest();
+
   xmlHttp.onreadystatechange = function() {
     if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
       callback(xmlHttp.responseText);
