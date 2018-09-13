@@ -63,7 +63,7 @@ if ($wordQuery != null) {
             }
 
             // saving the shortest word found
-            if (count($paths) < $shortest_length) {
+            if (count($paths) <= $shortest_length) {
                 $shortest_length = count($paths);
                 $spelled_words[ $words[$word_key] ]["shortest"][0] = $spelled_words[ $words[$word_key] ]["all"][$path_id];
             }
