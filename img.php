@@ -4,14 +4,12 @@ require 'functions.php';
 $db = connectDB();
 $dbSymbolList = getSymbolsFromDB($db);
 $sourceElementWidth = 512;
-$sourceElementPath = __DIR__ . DIRECTORY_SEPARATOR . "../f/atomo/p/512/";
+//$sourceElementPath is defined in config.php
 $requestedElementList = json_decode( $_GET["s"] );
 $requestedElementWidth = $_GET["w"];
 if ( ($requestedElementWidth == 0) || ($requestedElementWidth == "") )
     $requestedElementWidth = 128;
-
 //$requestedElementList = array("Ni", "Co", "La", "S");
-
 
 // create the final image canvas.
 // We will copy/merge image to this new image and build a word
@@ -51,6 +49,7 @@ foreach ($requestedElementList as $elementPosition => $requestedElement) {
 $wordImageScaled = imagescale($wordImage, count($requestedElementList) * $requestedElementWidth, $requestedElementWidth, IMG_BICUBIC);
 
 header('Content-type:image/png');
+header('Content-Disposition: inline; filename="AtOMo-' . implode($requestedElementList) . '.png"');
 imagepng($wordImageScaled);
 //imagepng($wordImage);
 
