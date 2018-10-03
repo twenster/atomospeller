@@ -1,112 +1,62 @@
 <?php
 require("functions.php");
+require("stoichiograph.php");
+require("foundry.php");
 
-$foundElementArray = array();
-$elementedWordArray = array();
-$jsonElementArray = array();
-$wordQuery = $_GET["q"]; // query
-$lengthPref = 2;
-$lengthOrder = array(2, 1);
+// very old
+//$request = explode("/", substr(@$_SERVER['PATH_INFO'], 1));
+// old
+//$method = $_SERVER['REQUEST_METHOD'];
+// XXI century
+$method = filter_input(INPUT_SERVER, 'REQUEST_METHOD');
 
-// affiche la page
+switch ($method) {
+    case 'PUT':
+        //do_something_with_put($request);
+        break;
 
-// envoie ue requête jquery pour récupérer le contenu
-// ou bien se recharge en envoyant les données
-if ($wordQuery != null) {
-    $db = connectDB();
+    case 'POST':
+        $postArgs = filter_input_array(INPUT_POST);
+        switchTab($postArgs);
+        break;
 
-    // recupère le liste des elements
-    $elementsList = getElementsFromDB($db);
-    $symbolsList = getSymbolsFromDB($db);
+    case 'GET':
+        $getArgs = filter_input_array(INPUT_GET);
+        switchTab($getArgs);
+        break;
 
-    //echo "<h1 style='margin-top: 1em'>";
+    default:
+        //handle_error($request);
+        break;
+}
 
-    // crée une table avec chaque mot entrée
-    $words = preg_replace('/[\W]+/', '', explode(' ', $wordQuery));
+function switchTab($formArgs) {
+    switch ($formArgs["t"]) { // t = tab, function
+        case 'search':
+            doSearch($formArgs["q"]);
+            break;
 
-    foreach ($words as $i => $word) {
-        foreach($lengthOrder as $lengthPref) {
+        case 'image':
+            doFoundry($formArgs["s"], $formArgs["w"]);
+            break;
 
-            //$found = searchElementFromHead($word, $elementList, $lengthPref, $foundElementArray);
-            //$elementedWordArrayByLength[$lengthPref][$word] = $foundElementArray;
-            $foundElementArray = array();
-            $endOfWord = searchElement($word, $lengthPref);
-            $elementedWordArrayByWord[$word]["all"][$lengthPref] = $foundElementArray;
-
-        }
-
-        // which foundElement is the shortest for current word?
-        if (count($elementedWordArrayByWord[$word]["all"][2]) <= count($elementedWordArrayByWord[$word]["all"][1]))
-            $elementedWordArrayByWord[$word]["shortest"] = $elementedWordArrayByWord[$word]["all"][2];
-        else
-            $elementedWordArrayByWord[$word]["shortest"] = $elementedWordArrayByWord[$word]["all"][1];
+        default:
+            break;
     }
 
-    foreach ($elementedWordArrayByWord as $thisWord => $thisWordArray) {
+}
 
-        $thisEntry = array(
-            "query" => $thisWord,
-            "suggestionList" => array()
-        );
+function doSearch($wordQuery) {
+    if ( ($wordQuery != null) || ($wordQuery !='') )
+        spellWord($wordQuery);
+}
 
-        //foreach ($thisWordArray as $thisLength => $thisElementArray) {
-        $thisElementArray = $thisWordArray["shortest"];
-
-            $thisImageArray = array();
-            foreach ($thisElementArray as $thisImage) {
-                $thisImageArray[] = array(
-                    "symbol" => $thisImage,
-                    "number" => array_searchi($thisImage, $symbolsList),
-                    "url" => "img.php?e=".$thisImage."&w=128"
-                );
-            }
-
-            $thisEntry["suggestionList"][] = array(
-                "suggestion" => implode($thisElementArray),
-                "elementList" => $thisImageArray
-            );
-        //}
-
-        array_push($elementedWordArray, $thisEntry);
+function doFoundry($symbolList, $symbolHeight) {
+    if ($symbolList != null) {
+        $symbolList = json_decode( $symbolList );
+        if ( ($symbolHeight == 0) || ($symbolHeight == "") )
+            $symbolHeight = 128;
+        composeImage($symbolList, $symbolHeight);
     }
-    $jsonElementArray = $elementedWordArray;
-
-    $asset = array(
-        "query" => $words,
-        "wordlist" => $jsonElementArray,
-
-        "source" => array(
-            "email" => "",
-            "website" => array(
-                array(
-                    "name" => "ATO main",
-                    "url" => "https://app.bookoforbs.com/ato/"
-                ),
-                array(
-                    "name" => "ATO market",
-                    "url" => "https://app.bookoforbs.com/ato/"
-                ),
-            ),
-            "social" => array(
-                array(
-                    "name" => "facebook",
-                    "url" => "https://www.facebook.com/blockchainizator/"
-                ),
-                array(
-                    "name" => "twitter",
-                    "url" => "https://twitter.com/Blockchainizatr/"
-                ),
-                array(
-                    "name" => "instagram",
-                    "url" => "https://www.instagram.com/blockchainizator/"
-                )
-            )
-        )
-    );
-//print_r($asset);
-    $assetJson = json_encode($asset);
-
-    header('Content-Type: application/json');
-    print($assetJson);
 }
 ?>

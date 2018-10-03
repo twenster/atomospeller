@@ -1,10 +1,11 @@
 <?php
 // Database credentials
-$servername = "";
-$database   = "";
-$username   = "";
-$password   = "";
+define("DBSERVERNAME", "");
+define("DBDATABASE",   "");
+define("DBUSERNAME",   "");
+define("DBPASSWORD".   "");
 
 // Source of Element image file
-$sourceElementPath = __DIR__ . DIRECTORY_SEPARATOR . "";
+define("SOURCEELEMENTPATH", __DIR__ . DIRECTORY_SEPARATOR . "");
+define("SOURCEELEMENTWIDTH", 512);
 ?>

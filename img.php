@@ -3,7 +3,7 @@ require 'functions.php';
 
 $db = connectDB();
 $dbSymbolList = getSymbolsFromDB($db);
-$sourceElementWidth = 512;
+//$sourceElementWidth = 512;
 //$sourceElementPath is defined in config.php
 $requestedElementList = json_decode( $_GET["s"] );
 $requestedElementWidth = $_GET["w"];
@@ -13,7 +13,7 @@ if ( ($requestedElementWidth == 0) || ($requestedElementWidth == "") )
 
 // create the final image canvas.
 // We will copy/merge image to this new image and build a word
-$wordImage = imagecreatetruecolor(count($requestedElementList) * $sourceElementWidth, $sourceElementWidth);
+$wordImage = imagecreatetruecolor(count($requestedElementList) * SOURCEELEMENTWIDTH, SOURCEELEMENTWIDTH);
 
 // Transparent background (PNG)
 imagesavealpha($wordImage, true);
@@ -21,7 +21,7 @@ $trans_colour = imagecolorallocatealpha($wordImage, 0, 0, 0, 127);
 imagefill($wordImage, 0, 0, $trans_colour);
 
 // Compose the new image,
-// Adds each element from the array to the image canvas
+// Adds each element from the array to the image canvas 
 foreach ($requestedElementList as $elementPosition => $requestedElement) {
     $symbolId = array_searchi($requestedElement, $dbSymbolList);
 
@@ -30,7 +30,7 @@ foreach ($requestedElementList as $elementPosition => $requestedElement) {
     if ( $symbolId ) {
         $elementListDB = getElementsFromDB($db);
         $sourceElementFilename = substr( "00" . $elementListDB[$symbolId]["number"], -3) . "atomo" . strtolower($elementListDB[$symbolId]["symbol"]) . "512.png";
-        $requestedElementImage = @imagecreatefrompng($sourceElementPath.$sourceElementFilename);
+        $requestedElementImage = @imagecreatefrompng(SOURCEELEMENTPATH.$sourceElementFilename);
     } else {
         $requestedElementImage = createLocalImage( array(
             "symbol" => "XX",
@@ -42,7 +42,7 @@ foreach ($requestedElementList as $elementPosition => $requestedElement) {
 
     // copy the element image to our own image.
     // in this case imagecopymerge() = imagecopy() because of the last parameter = 100
-    $r = imagecopymerge($wordImage, $requestedElementImage, $elementPosition * $sourceElementWidth, 0, 0, 0, $sourceElementWidth, $sourceElementWidth, 100);
+    $r = imagecopymerge($wordImage, $requestedElementImage, $elementPosition * SOURCEELEMENTWIDTH, 0, 0, 0, SOURCEELEMENTWIDTH, SOURCEELEMENTWIDTH, 100);
 }
 
 // Resize the image to the size given in the URL
