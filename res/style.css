@@ -137,6 +137,20 @@ h2.title {
 .atomo-results-wrapper .atomo-results {
   margin: 1em; }
 
+.atomo-result {
+  border: 1px solid silver;
+  margin: 1em;
+  padding: 1em; }
+
+.atomo-symbolized {
+  margin: 0.5em 0; }
+
+.atomo-slack {
+  margin: 0.5em 0; }
+
+.atomo-image {
+  margin: 0.5em 0; }
+
 footer {
   top: 1em;
   right: 1em;

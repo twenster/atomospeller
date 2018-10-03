@@ -10,13 +10,13 @@
             <div class="pure-g atomo-header-wrapper">
                 <div class="pure-u-1-1 atomo-header">
                     <img src="img/atomo-logo.png" title="AtOMo" alt="AtOMo logo">
-                    &nbsp;Speller <span class="atomo-superscript">(alpha)</span>
+                    &nbsp;Speller</span>
                 </div>
             </div>
             <div class="pure-g atomo-form-wrapper">
                 <div class="pure-u-1-1 atomo-form">
                     <input type="text" id="word" name="word" class="atomo-word">
-                    <button onclick="atomoSpell2()" id="lookup" class="atomo-lookup">Look up</button>
+                    <button onclick="atomoSpell()" id="lookup" class="atomo-lookup">Look up</button>
                 </div>
                 <div class="pure-u-1-1 pure-menu pure-menu-horizontal atomo-form-options">
                     <ul class="pure-menu-list">
