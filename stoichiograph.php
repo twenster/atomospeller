@@ -194,6 +194,8 @@ function spellWord($wordQuery) {
 
         }
 
+        // save each words for statistics
+        setStats($words[$word_key]);
     }
     $spelled_words_json = json_encode($spelled_words);
 
