@@ -1,3 +1,6 @@
+<?php
+require("functions.php");
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,23 +18,39 @@
                 </div>
             </div>
             <div class="pure-g atomo-form-wrapper">
-                <div class="pure-u-1-1 pure-form atomo-form">
-                    <input type="text" id="word" name="word" class="atomo-word">
-                    <button onclick="atomoSpell()" id="lookup" class="pure-button pure-button-primary atomo-lookup">Look up</button>
+                <div class="pure-u-1-1"><h1>Search Statistics</h1></div>
+                <div class="pure-u-1-2">
+<?php
+$statList = getStatsbyWordCount();
+$html = "<div class=\"atomo-table-select\"><table class=\"pure-table\"><thead><tr>".
+        "<th>Sorted by count</th><th>word</th>".
+        "</tr></thead>".
+        "<tbody>";
+foreach($statList as $id => $stat) {
+    $html = $html.
+        "<tr><td>".$stat["word_count"]."</td><td>".$stat["word"]."</td></tr>";
+}
+$html = $html.
+    "</table></div>";
+print($html);
+?>
                 </div>
-                <!-- div class="pure-u-1-1 pure-menu pure-menu-horizontal atomo-form-options">
-                    <ul class="pure-menu-list">
-                        <li class="pure-menu-item"><input type="radio" id="length_all" name="length" value="0" checked><label for="length_all">All</label></li>
-                        <li class="pure-menu-item"><input type="radio" id="length_shortest" name="length" value="1"><label for="length_shortest">Shortest</label></li>
-                </div -->
-            </div>
-            <div id="atomo-search-result" class="pure-g atomo-results-wrapper">
-            </div>
-
-            <div id="atomo-spelled-image" class="pure-g atomo-results-wrapper">
-            </div>
-
-            <div id="spelled">
+                <div class="pure-u-1-2">
+<?php
+$statList = getStatsbyDate();
+$html = "<div class=\"atomo-table-select\"><table class=\"pure-table\"><thead><tr>".
+        "<th>Sorted by Date</th><th>word</th>".
+        "</tr></thead>".
+        "<tbody>";
+foreach($statList as $id => $stat) {
+    $html = $html.
+        "<tr><td>".date("d M Y", strtotime($stat["word_date"]))."</td><td>".$stat["word"]."</td></tr>";
+}
+$html = $html.
+    "</table></div>";
+print($html);
+?>
+                </div>
             </div>
         </div>
         <footer>

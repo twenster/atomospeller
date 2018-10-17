@@ -1,43 +1,13 @@
 <?php
-function spell($word_key, $word) {
-    /* Return a list of any possible ways to spell a word with a given set of symbols.
-       Example:
-       >>> spell('amputation')
-       array (
-           ['Am', 'Pu', 'Ta', 'Ti', 'O', 'N'],
-           ['Am', 'P', 'U', 'Ta', 'Ti', 'O', 'N']
-       );
-    */
-    global $graphList;
+$processed = array();
+$graphList = array();
 
-    /* Builds an array (graph) of possible element and connection between them
-       to build the requested word.
-    */
-    pop_root($word);
-
-//print("<br>\nNode:<br>\n");
-//print_r($graphList[$word_key]->nodes);
-
-    /* Builds an array of array of all nodes (path) built to the requested word
-    */
-    $elemental_spellings = array();
-    foreach ($graphList[$word_key]->firsts() as $first) {
-        foreach ($graphList[$word_key]->lasts() as $last) {
-            foreach (find_all_paths($graphList[$word_key]->children_of, $first, $last) as $path) {
-//print("<br>\nPath<br>\n");
-//print_r($path);
-                array_push($elemental_spellings, $path);
-            }
-        }
-    }
-
-    return $elemental_spellings;
-}
+/*
+    A directed acyclic graph that stores all possible elemental
+    spellings of a word.
+*/
 
 class Graph {
-    /* A directed acyclic graph that stores all possible elemental
-    spellings of a word.
-    */
     public $nodes = array();
     public $parents_of = array("None" => array());
     public $children_of = array("None" => array());
@@ -63,12 +33,11 @@ class Graph {
     public function add_edge($parent, $child) {
         // Add a parent-child relatonship to the graph. None is ok as a
         // key, but not a value.
+
         //if ($parent != "None") {
-//print("child id:".$child."<br>\n");
             $this->parents_of[$child][] = $parent;
         //}
         //if ($child != "None") {
-//print("parent id:".$parent."<br>\n");
             $this->children_of[$parent][] = $child;
         //}
     }
@@ -156,8 +125,121 @@ class Graph {
 
 }
 
-function pop_root($remaining, $position = 0, $previous_root = "None") {
-    /* Pop the single and double-character roots off the front of a
+/*
+ Displays spellings with elements
+
+$spelled_words = array(
+    "word 1" = array( // list of suggestions / paths
+        0 => array( // suggestion 0 = path 0
+            "elemental_word" =>
+            "elements" => array(
+                symbol =>
+                number =>
+                url =>
+            )
+        )
+        1 => array( // suggestion 1 = path 1
+            ...
+        )
+    )
+    "word 2" => array( // list of suggestions / paths
+        ...
+    )
+)
+*/
+
+function spellWord($wordQuery) {
+    global $processed, $graphList;
+    $words = preg_replace('/[\W]+/', '', explode(' ', $wordQuery));
+
+    /*
+        Builds an array of all possible spelling for each queried word
+    */
+    $spellingList = array();
+    foreach ($words as $word_key => $word) {
+        $processed = array();
+        $graphList[$word_key] = new Graph;
+        $spellingList[$word_key] = spell($word_key, $word);
+    }
+
+    /*
+        Builds Array and convert into JSON
+    */
+    $spelled_words = array();
+    $spelled_words["globals"] = array();
+    $spelled_words["globals"]["source_element_width"] = SOURCEELEMENTWIDTH;
+
+    foreach ($spellingList as $word_key => $spelling) {
+
+        $spelled_words[ $words[$word_key] ] = array();
+        $spelled_words[ $words[$word_key] ]["shortest"] = array(); // shortest paths
+        $spelled_words[ $words[$word_key] ]["all"] = array(); // list of all paths
+        $shortest_length = strlen($words[$word_key]);
+
+        foreach ($spelling as $path_id => $paths) {
+            $spelled_words[ $words[$word_key] ]["all"][$path_id] = array(); // path #x
+            $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbolized_word"] = ""; // elements imploded
+            $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbols"] = array(); // elements in array
+
+            foreach ($paths as $node) {
+                $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbolized_word"] = $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbolized_word"] . ucfirst($graphList[$word_key]->nodes[$node][0]);
+                $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbols"][] = ucfirst($graphList[$word_key]->nodes[$node][0]);
+            }
+
+            // saving the shortest word found
+            if (count($paths) <= $shortest_length) {
+                $shortest_length = count($paths);
+                $spelled_words[ $words[$word_key] ]["shortest"][0] = $spelled_words[ $words[$word_key] ]["all"][$path_id];
+            }
+
+        }
+
+        // save each words for statistics
+        setStats($words[$word_key]);
+    }
+    $spelled_words_json = json_encode($spelled_words);
+
+    header('Content-Type: application/json');
+    print($spelled_words_json);
+}
+
+/*
+    Return a list of any possible ways to spell a word with a given set of symbols.
+    Example:
+    >>> spell('amputation')
+    array (
+        ['Am', 'Pu', 'Ta', 'Ti', 'O', 'N'],
+        ['Am', 'P', 'U', 'Ta', 'Ti', 'O', 'N']
+    );
+*/
+
+function spell($word_key, $word) {
+    global $graphList;
+
+    /*
+        Builds an array (graph) of possible element and connection between them
+        to build the requested word.
+    */
+    popRoot($word_key, $word);
+
+    /*
+        Builds an array of array of all nodes (path) built to the requested word
+    */
+    $elemental_spellings = array();
+    foreach ($graphList[$word_key]->firsts() as $first) {
+        foreach ($graphList[$word_key]->lasts() as $last) {
+            foreach (findAllPaths($graphList[$word_key]->children_of, $first, $last) as $path) {
+
+                array_push($elemental_spellings, $path);
+            }
+        }
+    }
+
+    return $elemental_spellings;
+}
+
+/*
+    Pop the single and double-character roots off the front of a
     given string, then recurse into what remains.
     For the word 'because', the roots and remainders for each call
     look something like:
@@ -181,36 +263,36 @@ function pop_root($remaining, $position = 0, $previous_root = "None") {
     evaluate a given value more than once.
     Keep track of the position of each root so that repeated roots
     are distinct nodes.
-    */
-    global $processed, $symbolsList, $graphList, $word_key;
-//print("<br>\npop(".$remaining.", ".$position.", ".$previous_root.")<br>\n");
+*/
+
+function popRoot($word_key, $remaining, $position = 0, $previous_root = "None") {
+    global $processed, $graphList;
+    $dbSymbolList = getSymbolsFromDB();
     if ($remaining == '') {
         $graphList[$word_key]->add_edge($previous_root, "None");
         return;
     }
 
-//print("&nbsp;single root (".$remaining[0].")<br>\n");
-    if (in_array(ucfirst($remaining[0]), $symbolsList)) {
+    if (in_array(ucfirst($remaining[0]), $dbSymbolList)) {
         $single_root = $graphList[$word_key]->add_node($remaining[0], $position);
         $graphList[$word_key]->add_edge($previous_root, $single_root);
         if (!in_array($remaining, $processed)) {
-            pop_root(substr($remaining, 1), $position + 1, $single_root);
+            popRoot($word_key, substr($remaining, 1), $position + 1, $single_root);
         }
     }
     if (strlen($remaining) >= 2) {
-//print("&nbsp;&nbsp;double root (".substr($remaining, 0, 2).")<br>\n");
-        if (in_array(ucfirst(substr($remaining, 0, 2)), $symbolsList)) {
+        if (in_array(ucfirst(substr($remaining, 0, 2)), $dbSymbolList)) {
             $double_root = $graphList[$word_key]->add_node(substr($remaining, 0, 2), $position);
             $graphList[$word_key]->add_edge($previous_root, $double_root);
             if (!in_array($remaining, $processed)) {
-                pop_root(substr($remaining, 2), $position + 2, $double_root);
+                popRoot($word_key, substr($remaining, 2), $position + 2, $double_root);
             }
         }
     }
     $processed[] = $remaining;
 }
 
-function find_all_paths($parents_to_children, $start, $end, $path=[]) {
+function findAllPaths($parents_to_children, $start, $end, $path=[]) {
     /* Return a list of all paths through a graph from start to end.
     `parents_to_children` is a dict with parent nodes as keys and sets
     of child nodes as values.
@@ -226,18 +308,12 @@ function find_all_paths($parents_to_children, $start, $end, $path=[]) {
     $paths = [];
     foreach ($parents_to_children[$start] as $node) {
         if (!in_array($node, $path)) {
-            $newpaths = find_all_paths($parents_to_children, $node, $end, $path);
+            $newpaths = findAllPaths($parents_to_children, $node, $end, $path);
             foreach ($newpaths as $newpath) {
                 array_push($paths, (ARRAY) $newpath);
             }
         }
     }
     return $paths;
-}
-
-class Elemental_Word {
-    public $word = "";
-    public $elemental_words = array();
-    public $paths = arraY();
 }
 ?>

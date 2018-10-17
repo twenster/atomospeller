@@ -1,0 +1,165 @@
+/**
+ * @file
+ * Main Style sheet for all site.
+ *
+ * This is the main stylesheet to be used for all website.
+ * Use it and override the rule in your own stylesheet file.
+ */
+/**
+ * @file
+ * Main common Style sheet for all site.
+ *
+ * This is the main stylesheet to be used for all website.
+ * Use it and override the rule in your own stylesheet file.
+ */
+/**
+ * @file
+ * Main common SASS Style sheet.
+ *
+ * This is the constant definitions.
+ */
+/* Screen sizes */
+/* Standford standard
+320px
+480px
+468px
+980px
+1200px
+*/
+/* PureCSS standard
+1em = 16px
+sm >=568px (35.5em)
+lg >=1024px (64em)
+md >=768px (48em)
+xl >=1280px (80em)
+*/
+/* Bootstrap standard
+xs <768px
+sm >=768px
+md >=992px
+lg >=1200px
+*/
+/* Sizes */
+/* Colours */
+/* Red
+*/
+/* Black
+   Pantone: Process Black C
+   CMYK: K 100%
+   RGB: 0%, 0%, 0%
+   RGB: 0, 0, 0
+*/
+/* Grey 80% black */
+/* Middle grey */
+/* Grey 25% black */
+/*
+// Links
+// -------------------------
+$linkColor:             $red;
+$linkColorHover:        darken($linkColor, 15%);
+*/
+/* $box = { border-box | content-box } */
+/* HTML5 compatibility */
+header, footer, nav, section, aside {
+  display: block; }
+
+/* PureCSS override */
+html, button, input, select, textarea,
+.pure-g [class*="pure-u"] {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+body {
+  background-color: white; }
+
+/**
+ * Common rules
+ */
+a {
+  color: #666666;
+  text-decoration: none; }
+
+a:hover {
+  color: #F60000;
+  text-decoration: underline; }
+
+a:link, a:visited {
+  color: #666666; }
+
+h1, h2, h3, h4 {
+  color: #666666; }
+
+h1.title {
+  border-bottom: 1px solid #ccc;
+  clear: left;
+  font-family: inherit;
+  font-size: 1.6em;
+  font-weight: bold;
+  line-height: 1.272em;
+  width: auto; }
+
+h2.title {
+  font-size: 1.6em;
+  line-height: 1.6em;
+  margin: 0;
+  text-transform: uppercase; }
+
+.pre {
+  font-family: monospace;
+  /*white-space: pre-wrap;*/
+  word-wrap: break-word; }
+
+.atomo-page-wrapper {
+  margin: 0 auto;
+  max-width: 1200px; }
+
+.atomo-header-wrapper {
+  text-align: center;
+  margin: 2em 0; }
+  .atomo-header-wrapper .atomo-header {
+    display: inline-block;
+    font-size: 2.0em; }
+
+.atomo-superscript {
+  color: #ff0000;
+  font-size: .42em;
+  vertical-align: super; }
+
+.atomo-form-wrapper {
+  margin: 2em 0;
+  text-align: center; }
+  .atomo-form-wrapper .atomo-form {
+    display: inline-block; }
+    .atomo-form-wrapper .atomo-form .atomo-word {
+      font-size: 1.6em; }
+    .atomo-form-wrapper .atomo-form .atomo-lookup {
+      font-size: 1.6em; }
+
+.atomo-results-wrapper .atomo-table-select {
+  display: inline-block; }
+.atomo-results-wrapper .atomo-table-button {
+  display: inline-block; }
+.atomo-results-wrapper .atomo-select {
+  border: none; }
+.atomo-results-wrapper .atomo-results {
+  margin: 1em; }
+
+.atomo-result {
+  border: 1px solid silver;
+  padding: 1em; }
+
+.atomo-symbolized {
+  margin: 0.5em 0; }
+
+.atomo-slack {
+  margin: 0.5em 0; }
+
+.atomo-image {
+  margin: 0.5em 0; }
+
+.atomo-disclaimer {
+  background-color: #eeeeee;
+  color: #444444;
+  margin-top: -2em;
+  padding: 0.5em; }
+
+/*# sourceMappingURL=style.css.map */

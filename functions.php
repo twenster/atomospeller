@@ -7,11 +7,14 @@
 require("config.php");
 
 // DB Connect
+$db = connectDB();
+//$dbElementsList = getElementsFromDB($db);
+//$dbSymbolsList = getSymbolsFromDB($db);
 
 //  Create a new connection to the MySQL database using PDO
 function connectDB() {
-    global $servername, $database, $username, $password;
-    return new PDO('mysql:host='.$servername.';dbname='.$database, $username, $password);
+    //global $servername, $database, $username, $password;
+    return new PDO('mysql:host='.DBSERVERNAME.';dbname='.DBDATABASE, DBUSERNAME, DBPASSWORD);
  }
 
 
@@ -23,76 +26,38 @@ function getElement($string, &$array) {
     }
 }
 
-function getElementsFromDB($db) {
+function getElementsFromDB() {
+    global $db;
     $result = $db->query('SELECT symbol, name, number FROM elements')->fetchAll();
     array_unshift($result, "dummy");
     return $result;
 }
 
-function getSymbolsFromDB($db) {
+function getSymbolsFromDB() {
+    global $db;
     $result = $db->query('SELECT symbol FROM elements')->fetchAll(PDO::FETCH_COLUMN);
     array_unshift($result, "dummy");
     return $result;
 }
 
-// setter
-
-// Functions
-
-/*
- * $word = word or tail of the word to search
- * $lengthPref = search a 2 character or 1 character length element
- * $endOfWord or return = true when there is the word or tail is empty, we stop the search.
- * $head = 1 or 2 charecter element to search in the element list
- * $tail = the end part of the word we still need to look for.
- */
-function searchElement($word, $lengthPref) {
-    global $foundElementArray, $symbolsList;
-    $endOfWord = false;
-
-    // search for $lengPref characters element
-    $head = substr($word, 0, $lengthPref);
-    if (strlen($head)==0)
-        return true;
-
-    if (in_arrayi($head, $symbolsList)) {
-
-        array_push($foundElementArray, getElement($head, $symbolsList));
-        $tail = substr($word, $lengthPref);
-        $endOfWord = searchElement($tail, $lengthPref);
-        if ($endOfWord == true)
-            return true;
-        return false;
-    }
-
-    // swap length
-    $lengthPref = ( ($lengthPref==1) ? 2 : 1 );
-
-    // 1 character element
-    $head = substr($word, 0, $lengthPref);
-    if (strlen($head)==0)
-        return true;
-
-    if (in_arrayi($head, $symbolsList)) {
-
-        array_push($foundElementArray, getElement($head, $symbolsList));
-        $tail = substr($word, $lengthPref);
-        $endOfWord = searchElement($tail, $lengthPref);
-        if ($endOfWord == true)
-            return true;
-        return false;
-    }
-
-    // no element found, we loop to the next character, ad forget the $head
-    $tail = substr($word, 1);
-    $endOfWord = searchElement($tail, 1);
-    if ($endOfWord == true)
-        return true;
-    return false;
-
+function getStatsbyWordCount() {
+    global $db;
+    $result = $db->query('SELECT count(word) as word_count, word FROM `search_log` WHERE 1 GROUP BY word ORDER BY count(word) DESC')->fetchAll();
+    return $result;
 }
 
+function getStatsbyDate() {
+    global $db;
+    $result = $db->query('SELECT timestamp as word_date, word FROM `search_log` WHERE 1 ORDER BY timestamp DESC LIMIT 50')->fetchAll();
+    return $result;
+}
+// setter
 
+function setStats($word) {
+    global $db;
+    $result = $db->prepare( "INSERT INTO search_log SET timestamp = NOW(), word = '" . $word . "'" )->execute();
+}
+// Functions
 function in_arrayi($needle, &$haystack) {
     return in_array(strtolower($needle), array_map('strtolower', $haystack));
 }
