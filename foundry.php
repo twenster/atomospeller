@@ -19,7 +19,7 @@ function composeImage($requestedElementList, $requestedElementWidth) {
         // if the requestedElement exists in the Element from the database,
         // We load the image file, or we create an empty one
         if ( $symbolId ) {
-            $sourceElementFilename = substr( "00" . $dbElementList[$symbolId]["number"], -3) . "atomo" . strtolower($dbElementList[$symbolId]["symbol"]) . "512.png";
+            $sourceElementFilename = substr( "00" . $dbElementList[$symbolId]["number"], -3) . "atomo" . strtolower($dbElementList[$symbolId]["symbol"]) . "256.png";
             $requestedElementImage = @imagecreatefrompng(SOURCEELEMENTPATH.$sourceElementFilename);
         } else {
             $requestedElementImage = createLocalImage( array(

@@ -134,12 +134,17 @@ h2.title {
     .atomo-form-wrapper .atomo-form .atomo-lookup {
       font-size: 1.6em; }
 
+.atomo-results-wrapper .atomo-table-select {
+  display: inline-block; }
+.atomo-results-wrapper .atomo-table-button {
+  display: inline-block; }
+.atomo-results-wrapper .atomo-select {
+  border: none; }
 .atomo-results-wrapper .atomo-results {
   margin: 1em; }
 
 .atomo-result {
   border: 1px solid silver;
-  margin: 1em;
   padding: 1em; }
 
 .atomo-symbolized {
@@ -151,16 +156,10 @@ h2.title {
 .atomo-image {
   margin: 0.5em 0; }
 
-footer {
-  top: 1em;
-  right: 1em;
+.atomo-disclaimer {
   background-color: #eeeeee;
   color: #444444;
-  position: absolute;
-  padding: 0.5em;
-  width: 300px; }
-
-.atomo-disclaimer {
-  position: relative; }
+  margin-top: -2em;
+  padding: 0.5em; }
 
 /*# sourceMappingURL=style.css.map */

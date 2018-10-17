@@ -8,32 +8,33 @@
     <body onload="">
         <div class="atomo-page-wrapper">
             <div class="pure-g atomo-header-wrapper">
+                <div class="pure-u-1-1 atomo-disclaimer">This is an Alpha release. Some planned features are being implemented. Give us feedback: <a href="https://t.me/At_O_Mo">Telegram</a>, <a href="https://twitter.com/Blockchainizatr/">Twitter</a></div>
                 <div class="pure-u-1-1 atomo-header">
                     <img src="img/atomo-logo.png" title="AtOMo" alt="AtOMo logo">
                     &nbsp;Speller</span>
                 </div>
             </div>
             <div class="pure-g atomo-form-wrapper">
-                <div class="pure-u-1-1 atomo-form">
+                <div class="pure-u-1-1 pure-form atomo-form">
                     <input type="text" id="word" name="word" class="atomo-word">
-                    <button onclick="atomoSpell()" id="lookup" class="atomo-lookup">Look up</button>
+                    <button onclick="atomoSpell()" id="lookup" class="pure-button pure-button-primary atomo-lookup">Look up</button>
                 </div>
-                <div class="pure-u-1-1 pure-menu pure-menu-horizontal atomo-form-options">
+                <!-- div class="pure-u-1-1 pure-menu pure-menu-horizontal atomo-form-options">
                     <ul class="pure-menu-list">
                         <li class="pure-menu-item"><input type="radio" id="length_all" name="length" value="0" checked><label for="length_all">All</label></li>
                         <li class="pure-menu-item"><input type="radio" id="length_shortest" name="length" value="1"><label for="length_shortest">Shortest</label></li>
-                </div>
+                </div -->
             </div>
-            <div id="spelled" class="pure-g atomo-results-wrapper">
+            <div id="atomo-search-result" class="pure-g atomo-results-wrapper">
+            </div>
+
+            <div id="atomo-spelled-image" class="pure-g atomo-results-wrapper">
+            </div>
+
+            <div id="spelled">
             </div>
         </div>
         <footer>
-            <div class="atomo-disclaimer">This release of our AtOMo Speller is an Alpha release. Some planned features are being implemented. We appreciate your feedback on the accuracy of the spelling results, and possible improvements. Connect to our channels:
-                <ul>
-                    <li><a href="https://t.me/At_O_Mo">Telegram</a></li>
-                    <li><a href="https://twitter.com/Blockchainizatr/">Twitter</a></li>
-                </ul>
-            </div>
         </footer>
     </body>
     <script type="text/javascript" src="res/atomo.js"></script>

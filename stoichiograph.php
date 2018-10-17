@@ -166,6 +166,9 @@ function spellWord($wordQuery) {
         Builds Array and convert into JSON
     */
     $spelled_words = array();
+    $spelled_words["globals"] = array();
+    $spelled_words["globals"]["source_element_width"] = SOURCEELEMENTWIDTH;
+
     foreach ($spellingList as $word_key => $spelling) {
 
         $spelled_words[ $words[$word_key] ] = array();
@@ -176,7 +179,7 @@ function spellWord($wordQuery) {
         foreach ($spelling as $path_id => $paths) {
             $spelled_words[ $words[$word_key] ]["all"][$path_id] = array(); // path #x
             $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbolized_word"] = ""; // elements imploded
-            $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbols"] = array(); // emenets in array
+            $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbols"] = array(); // elements in array
 
             foreach ($paths as $node) {
                 $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbolized_word"] = $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbolized_word"] . ucfirst($graphList[$word_key]->nodes[$node][0]);
@@ -188,6 +191,7 @@ function spellWord($wordQuery) {
                 $shortest_length = count($paths);
                 $spelled_words[ $words[$word_key] ]["shortest"][0] = $spelled_words[ $words[$word_key] ]["all"][$path_id];
             }
+
         }
 
     }
