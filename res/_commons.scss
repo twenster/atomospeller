@@ -61,3 +61,31 @@ h2.title {
   /*white-space: pre-wrap;*/
   word-wrap: break-word;
 }
+
+/**
+ * PureCSS extension
+**/
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+   color: white;
+   border-radius: 4px;
+   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-success {
+   background: $green; /* this is a green */
+}
+
+.button-error {
+   background: $red; /* this is a maroon */
+}
+
+.button-warning {
+   background: $orange; /* this is an orange */
+}
+
+.button-secondary {
+   background: $blue; /* this is a light blue */
+}

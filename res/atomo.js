@@ -35,7 +35,7 @@ function atomoSpellHub(response) {
 
     // table header
     searchResultHTML = "<div class=\"pure-u-1-1\">"
-        + "<p>Each word may have different spelling, select your prefered word to compose you sentence</p>"
+        + "<p>Each word may have different spellings, select your prefered word to compose your sentence</p>"
         + "<div class=\"atomo-table-select\"><table class=\"pure-table\"><thead><tr>";
     for (var queryWordId in atomoSearchResultJSON["query_components"]) {
         searchResultHTML +=
@@ -77,7 +77,7 @@ function atomoSpellHub(response) {
 
     if ( (searchResultFound>0) )
         searchResultHTML +=
-            "<div class=\"atomo-table-button\"><button class=\"pure-button atomo-lookup\" onClick=\"atomoComposeImage()\">Create image</button></div></div>";
+            "<div class=\"atomo-table-button\"><button id=\"atomo-create\" class=\"pure-button button-secondary pure-button-disabled atomo-lookup\" onClick=\"atomoComposeImage()\">Create image</button></div></div>";
 
 
     // display the result
@@ -127,8 +127,10 @@ function atomoComposeImage() {
 
 function atomoSaveWord(word) {
     var selectedWordList = document.getElementById("atomo-"+word);
+    var createButton = document.getElementById("atomo-create");
     atomoSearchResultJSON [ "query_components" ][ word ][ "selected" ] = selectedWordList.options[selectedWordList.selectedIndex].value
     atomoSelectedWords [word] = selectedWordList.options[selectedWordList.selectedIndex].value;
+    createButton.classList.remove("pure-button-disabled");
 }
 
 function httpGetAsync(theUrl, callback) {
