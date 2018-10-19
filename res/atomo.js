@@ -10,8 +10,8 @@ var atomoSearchResultJSON = "";
 var atomoSelectedWords = [];
 
 function atomoSpell() {
-    word = document.getElementById("word").value;
-    length = document.getElementsByName("length").value;
+    var word = document.getElementById("word").value;
+    var length = document.getElementsByName("length").value;
 
     document.getElementById("atomo-search-result").innerHTML = "";
     document.getElementById("atomo-spelled-image").innerHTML = "";
@@ -104,6 +104,7 @@ function atomoComposeImage() {
             }
         }
     }
+    slackemoji_list = slackemoji_list.trim();
 
     spelledImageHTML +=
           "<div class=\"pure-u-1-1 atomo-result\">"
@@ -111,8 +112,8 @@ function atomoComposeImage() {
         + "Symbolized: " + symbolized_word_list
         + "</div>"
         + "<div class=\"pure-u-1-1 atomo-slack\">"
-        + "Slack emoji: " + slackemoji_list
-        + " <button class=\"pure-button\" onClick=\"copyToClipboard('" + slackemoji_list + "');\">Copy Text</button>"
+        + "Slack emoji: <input id=\"atomo-slack-" + symbolized_word_list + "\" class=\"atomo-slack-input\" type=\“text\“ value=\"" + slackemoji_list + "\">"
+        + " <button class=\"pure-button\" onClick=\"copyToClipboard('atomo-slack-" + symbolized_word_list + "');\">Copy Text</button>"
         + "</div>"
         + "<div class=\"pure-u-1-1 atomo-image\">"
         //+ "<img src='img.php?s=" + JSON.stringify(symbolList) + "&w=" + imgWidth + "' alt='"+symbolized_word+"'>"
@@ -143,7 +144,6 @@ function httpGetAsync(theUrl, callback) {
     }
 
     xmlHttp.open("GET", theUrl, true); // true for asynchronous
-    xmlHttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     xmlHttp.send(null);
 }
 
