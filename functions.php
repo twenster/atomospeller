@@ -55,7 +55,9 @@ function getStatsbyDate() {
 
 function setStats($word) {
     global $db;
-    $result = $db->prepare( "INSERT INTO search_log SET timestamp = NOW(), word = '" . $word . "'" )->execute();
+    if (DEPLOY == "PROD") {
+        $result = $db->prepare( "INSERT INTO search_log SET timestamp = NOW(), word = '" . $word . "'" )->execute();
+    }
 }
 // Functions
 function in_arrayi($needle, &$haystack) {
