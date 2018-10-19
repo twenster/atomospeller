@@ -166,30 +166,31 @@ function spellWord($wordQuery) {
         Builds Array and convert into JSON
     */
     $spelled_words = array();
-    $spelled_words["globals"] = array();
-    $spelled_words["globals"]["source_element_width"] = SOURCEELEMENTWIDTH;
+    $spelled_words["atomo_settings"] = array();
+    $spelled_words["atomo_settings"]["source_element_width"] = SOURCEELEMENTWIDTH;
+    $spelled_words["query_components"] = array();
 
     foreach ($spellingList as $word_key => $spelling) {
 
-        $spelled_words[ $words[$word_key] ] = array();
-        $spelled_words[ $words[$word_key] ]["shortest"] = array(); // shortest paths
-        $spelled_words[ $words[$word_key] ]["all"] = array(); // list of all paths
+        $spelled_words["query_components"][ $words[$word_key] ] = array();
+        $spelled_words["query_components"][ $words[$word_key] ]["shortest"] = array(); // shortest paths
+        $spelled_words["query_components"][ $words[$word_key] ]["all"] = array(); // list of all paths
         $shortest_length = strlen($words[$word_key]);
 
         foreach ($spelling as $path_id => $paths) {
-            $spelled_words[ $words[$word_key] ]["all"][$path_id] = array(); // path #x
-            $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbolized_word"] = ""; // elements imploded
-            $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbols"] = array(); // elements in array
+            $spelled_words["query_components"][ $words[$word_key] ]["all"][$path_id]                    = array(); // path #x
+            $spelled_words["query_components"][ $words[$word_key] ]["all"][$path_id]["symbolized_word"] = ""; // elements imploded
+            $spelled_words["query_components"][ $words[$word_key] ]["all"][$path_id]["symbols"]         = array(); // elements in array
 
             foreach ($paths as $node) {
-                $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbolized_word"] = $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbolized_word"] . ucfirst($graphList[$word_key]->nodes[$node][0]);
-                $spelled_words[ $words[$word_key] ]["all"][$path_id]["symbols"][] = ucfirst($graphList[$word_key]->nodes[$node][0]);
+                $spelled_words["query_components"][ $words[$word_key] ]["all"][$path_id]["symbolized_word"] = $spelled_words["query_components"][ $words[$word_key] ]["all"][$path_id]["symbolized_word"] . ucfirst($graphList[$word_key]->nodes[$node][0]);
+                $spelled_words["query_components"][ $words[$word_key] ]["all"][$path_id]["symbols"][]       = ucfirst($graphList[$word_key]->nodes[$node][0]);
             }
 
             // saving the shortest word found
             if (count($paths) <= $shortest_length) {
                 $shortest_length = count($paths);
-                $spelled_words[ $words[$word_key] ]["shortest"][0] = $spelled_words[ $words[$word_key] ]["all"][$path_id];
+                $spelled_words["query_components"][ $words[$word_key] ]["shortest"][0] = $spelled_words["query_components"][ $words[$word_key] ]["all"][$path_id];
             }
 
         }
