@@ -11,4 +11,7 @@ define("SOURCEELEMENTWIDTH", 512);
 
 // Deployment PROD or DEV
 define("DEPLOY", "DEV");
+
+// ipstack key (https://ipstack.com/)
+define("IPSTACK", "");
 ?>

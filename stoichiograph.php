@@ -168,6 +168,7 @@ function spellWord($wordQuery) {
     $spelled_words = array();
     $spelled_words["atomo_settings"] = array();
     $spelled_words["atomo_settings"]["source_element_width"] = SOURCEELEMENTWIDTH;
+    //$spelled_words["atomo_settings"]["country_code"] = getCountry();
     $spelled_words["query_components"] = array();
 
     foreach ($spellingList as $word_key => $spelling) {
@@ -196,7 +197,7 @@ function spellWord($wordQuery) {
         }
 
         // save each words for statistics
-        setStats($words[$word_key]);
+        setLog($words[$word_key]);
     }
     $spelled_words_json = json_encode($spelled_words);
 
