@@ -29,7 +29,7 @@
 }
 
 .atomo-form-wrapper {
-    margin: 2em 0;
+    margin: 1em 0;
     text-align: center;
 
     .atomo-form {
@@ -45,11 +45,17 @@
 }
 
 .atomo-results-wrapper {
+    margin: 1em 0;
+
     .atomo-table-select {
         display: inline-block;
+        margin-right: 1em;
+        vertical-align: top;
     }
     .atomo-table-button {
         display: inline-block;
+        margin-right: 1em;
+        vertical-align: top;
     }
     .atomo-select {
         border: none;
@@ -69,6 +75,10 @@
 
 .atomo-slack {
     margin: 0.5em 0;
+}
+
+.atomo-slack-input {
+    padding: 0.5em 1em;
 }
 
 .atomo-image {

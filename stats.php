@@ -39,12 +39,12 @@ print($html);
 <?php
 $statList = getStatsbyDate();
 $html = "<div class=\"atomo-table-select\"><table class=\"pure-table\"><thead><tr>".
-        "<th>Sorted by Date</th><th>word</th>".
+        "<th>Sorted by Date</th><th>Word</th><th>Country</th>".
         "</tr></thead>".
         "<tbody>";
 foreach($statList as $id => $stat) {
     $html = $html.
-        "<tr><td>".date("d M Y", strtotime($stat["word_date"]))."</td><td>".$stat["word"]."</td></tr>";
+        "<tr><td>".date("d M Y", strtotime($stat["word_date"]))."</td><td>".$stat["word"]."</td><td>".$stat["country"]."</td></tr>";
 }
 $html = $html.
     "</table></div>";

@@ -40,6 +40,11 @@ function getSymbolsFromDB() {
     return $result;
 }
 
+function getCountry() {
+    $countryJSON = json_decode(file_get_contents("http://api.ipstack.com/" . $_SERVER["REMOTE_ADDR"] . "?fields=country_code&access_key=" . IPSTACK));
+    return $countryJSON->country_code;
+}
+
 function getStatsbyWordCount() {
     global $db;
     $result = $db->query('SELECT count(word) as word_count, word FROM `search_log` WHERE 1 GROUP BY word ORDER BY count(word) DESC')->fetchAll();
@@ -48,14 +53,17 @@ function getStatsbyWordCount() {
 
 function getStatsbyDate() {
     global $db;
-    $result = $db->query('SELECT timestamp as word_date, word FROM `search_log` WHERE 1 ORDER BY timestamp DESC LIMIT 50')->fetchAll();
+    $result = $db->query('SELECT timestamp as word_date, word, country FROM `search_log` WHERE 1 ORDER BY timestamp DESC LIMIT 50')->fetchAll();
     return $result;
 }
 // setter
 
-function setStats($word) {
+function setLog($word) {
     global $db;
-    $result = $db->prepare( "INSERT INTO search_log SET timestamp = NOW(), word = '" . $word . "'" )->execute();
+    if (DEPLOY == "PROD") {
+        $country_code = getCountry();
+        $result = $db->prepare( "INSERT INTO search_log SET timestamp = NOW(), word = '" . $word . "', country = '" . $country_code . "'" )->execute();
+    }
 }
 // Functions
 function in_arrayi($needle, &$haystack) {

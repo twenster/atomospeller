@@ -108,6 +108,33 @@ h2.title {
   /*white-space: pre-wrap;*/
   word-wrap: break-word; }
 
+/**
+ * PureCSS extension
+**/
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+  color: white;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); }
+
+.button-success {
+  background: #46A546;
+  /* this is a green */ }
+
+.button-error {
+  background: #F60000;
+  /* this is a maroon */ }
+
+.button-warning {
+  background: #F89406;
+  /* this is an orange */ }
+
+.button-secondary {
+  background: #049CDB;
+  /* this is a light blue */ }
+
 .atomo-page-wrapper {
   margin: 0 auto;
   max-width: 1200px; }
@@ -125,7 +152,7 @@ h2.title {
   vertical-align: super; }
 
 .atomo-form-wrapper {
-  margin: 2em 0;
+  margin: 1em 0;
   text-align: center; }
   .atomo-form-wrapper .atomo-form {
     display: inline-block; }
@@ -134,14 +161,20 @@ h2.title {
     .atomo-form-wrapper .atomo-form .atomo-lookup {
       font-size: 1.6em; }
 
-.atomo-results-wrapper .atomo-table-select {
-  display: inline-block; }
-.atomo-results-wrapper .atomo-table-button {
-  display: inline-block; }
-.atomo-results-wrapper .atomo-select {
-  border: none; }
-.atomo-results-wrapper .atomo-results {
-  margin: 1em; }
+.atomo-results-wrapper {
+  margin: 1em 0; }
+  .atomo-results-wrapper .atomo-table-select {
+    display: inline-block;
+    margin-right: 1em;
+    vertical-align: top; }
+  .atomo-results-wrapper .atomo-table-button {
+    display: inline-block;
+    margin-right: 1em;
+    vertical-align: top; }
+  .atomo-results-wrapper .atomo-select {
+    border: none; }
+  .atomo-results-wrapper .atomo-results {
+    margin: 1em; }
 
 .atomo-result {
   border: 1px solid silver;
@@ -152,6 +185,9 @@ h2.title {
 
 .atomo-slack {
   margin: 0.5em 0; }
+
+.atomo-slack-input {
+  padding: 0.5em 1em; }
 
 .atomo-image {
   margin: 0.5em 0; }

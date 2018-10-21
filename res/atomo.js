@@ -10,8 +10,8 @@ var atomoSearchResultJSON = "";
 var atomoSelectedWords = [];
 
 function atomoSpell() {
-    word = document.getElementById("word").value;
-    length = document.getElementsByName("length").value;
+    var word = document.getElementById("word").value;
+    var length = document.getElementsByName("length").value;
 
     document.getElementById("atomo-search-result").innerHTML = "";
     document.getElementById("atomo-spelled-image").innerHTML = "";
@@ -24,48 +24,60 @@ function atomoSpellHub(response) {
     console.log(response);
     atomoSearchResultJSON = JSON.parse(response);
     var queryLength = "all";
-    var imgWidth = atomoSearchResultJSON["globals"]["source_element_width"];
+    var imgWidth = atomoSearchResultJSON["atomo_settings"]["source_element_width"];
     var searchResultHTML = "";
+    var searchResultFound = 0;
 
     // prepare global variable
-    for (var queryWordId in atomoSearchResultJSON) {
+    for (var queryWordId in atomoSearchResultJSON["query_components"]) {
         atomoSelectedWords[queryWordId] = "";
     }
 
     // table header
     searchResultHTML = "<div class=\"pure-u-1-1\">"
-        + "<p>Each word may have different spelling, select your prefered word to compose you sentence</p>"
+        + "<p>Each word may have different spellings, select your prefered word to compose your sentence</p>"
         + "<div class=\"atomo-table-select\"><table class=\"pure-table\"><thead><tr>";
-    for (var queryWordId in atomoSearchResultJSON) {
-        if (queryWordId != "globals") { // globals contains some server variable
-            searchResultHTML = searchResultHTML
-                + "<th>" + queryWordId + "</th>";
-        }
+    for (var queryWordId in atomoSearchResultJSON["query_components"]) {
+        searchResultHTML +=
+            "<th>" + queryWordId + "</th>";
     }
-    searchResultHTML = searchResultHTML
-        + "</tr></thead>";
+    searchResultHTML +=
+        "</tr></thead>";
 
     // table row
-    searchResultHTML = searchResultHTML
-        + "<tbody><tr>";
-    for (var queryWordId in atomoSearchResultJSON) {
-        if (queryWordId != "globals") { // globals contains some server variable
-            searchResultHTML = searchResultHTML
-                + "<td><select id=\"atomo-" + queryWordId + "\" class=\"atomo-select\" size=\"5\" onChange=\"atomoSaveWord('"+queryWordId+"')\">";
-            for (spellingsId   in atomoSearchResultJSON [ queryWordId ][ queryLength] ) {
-                symbol_list     = atomoSearchResultJSON [ queryWordId ][ queryLength ][ spellingsId ][ "symbols" ].join("-");
-                symbolized_word = atomoSearchResultJSON [ queryWordId ][ queryLength ][ spellingsId ][ "symbolized_word" ];
+    searchResultHTML +=
+        "<tbody><tr>";
+    for (var queryWordId in atomoSearchResultJSON["query_components"]) {
+        if (atomoSearchResultJSON ["query_components"][ queryWordId ][ queryLength ].length > 0) {
+            searchResultFound += 1;
+            searchResultHTML +=
+                "<td><select id=\"atomo-" + queryWordId + "\" class=\"atomo-select\" size=\"5\" onChange=\"atomoSaveWord('"+queryWordId+"')\">";
+            for (spellingsId   in atomoSearchResultJSON ["query_components"][ queryWordId ][ queryLength] ) {
+                symbolized_word = atomoSearchResultJSON ["query_components"][ queryWordId ][ queryLength ][ spellingsId ][ "symbolized_word" ];
 
-                searchResultHTML = searchResultHTML
-                    + "<option class=\"pure-button\" value=\"" + symbolized_word + "\">" + symbol_list + "</option>";
+                // If there is only one symbols, you can't join the array !
+                if (atomoSearchResultJSON ["query_components"][ queryWordId ][ queryLength ][ spellingsId ][ "symbols" ].length > 1) {
+                    symbol_list = atomoSearchResultJSON ["query_components"][ queryWordId ][ queryLength ][ spellingsId ][ "symbols" ].join("-");
+                } else {
+                    symbol_list = atomoSearchResultJSON ["query_components"][ queryWordId ][ queryLength ][ spellingsId ][ "symbols" ];
+                }
+
+                searchResultHTML +=
+                    "<option class=\"pure-button\" value=\"" + symbolized_word + "\">" + symbol_list + "</option>";
             }
-            searchResultHTML = searchResultHTML
-                + "</select></td>";
+            searchResultHTML +=
+                "</select></td>";
+        } else {
+            searchResultHTML +=
+                "<td>No Spelling found</td>";
         }
     }
-    searchResultHTML = searchResultHTML
-        + "</tr></table></div>"
-        + "<div class=\"atomo-table-button\"><button class=\"pure-button atomo-lookup\" onClick=\"atomoComposeImage()\">Create image</button></div></div>";
+    searchResultHTML +=
+        "</tr></table></div>";
+
+    if ( (searchResultFound>0) )
+        searchResultHTML +=
+            "<div class=\"atomo-table-button\"><button id=\"atomo-create\" class=\"pure-button button-secondary pure-button-disabled atomo-lookup\" onClick=\"atomoComposeImage()\">Create image</button></div></div>";
 
 
     // display the result
@@ -81,28 +93,27 @@ function atomoComposeImage() {
     var spelledImageHTML = "";
 
 //    for (var queryWordId in atomoSelectedWords) {
-    for (var queryWordId in atomoSearchResultJSON) {
-        if (queryWordId != "globals") {
+    for (var queryWordId in atomoSearchResultJSON["query_components"]) {
+        symbolized_word_list +=
+            atomoSearchResultJSON["query_components"][ queryWordId ][ "selected" ] + " ";
 
-            symbolized_word_list = symbolized_word_list + atomoSearchResultJSON[ queryWordId ][ "selected" ] + " ";
-
-            for (var all_symbolized in atomoSearchResultJSON[ queryWordId ][ queryLength ]) {
-                if (atomoSearchResultJSON[ queryWordId ][ queryLength ] [ all_symbolized ][ "symbolized_word" ] == atomoSearchResultJSON[ queryWordId ][ "selected" ]) {
-                    slackemoji_list = slackemoji_list + " " + (':atomo' + atomoSearchResultJSON[ queryWordId ][ queryLength ] [ all_symbolized ][ "symbols" ].join(': :atomo') + ':').toLowerCase();
-                    symbols_list = symbols_list.concat(atomoSearchResultJSON[ queryWordId ][ queryLength ] [ all_symbolized ][ "symbols" ]);
-                }
+        for (var all_symbolized in atomoSearchResultJSON["query_components"][ queryWordId ][ queryLength ]) {
+            if (atomoSearchResultJSON [ "query_components" ][ queryWordId ][ queryLength ] [ all_symbolized ][ "symbolized_word" ] == atomoSearchResultJSON["query_components"][ queryWordId ][ "selected" ]) {
+                slackemoji_list = slackemoji_list + " " + (':atomo' + atomoSearchResultJSON [ "query_components" ][ queryWordId ][ queryLength ] [ all_symbolized ][ "symbols" ].join(': :atomo') + ':').toLowerCase();
+                symbols_list = symbols_list.concat(atomoSearchResultJSON["query_components"][ queryWordId ][ queryLength ] [ all_symbolized ][ "symbols" ]);
             }
         }
     }
+    slackemoji_list = slackemoji_list.trim();
 
-    spelledImageHTML = spelledImageHTML
-        + "<div class=\"pure-u-1-1 atomo-result\">"
+    spelledImageHTML +=
+          "<div class=\"pure-u-1-1 atomo-result\">"
         + "<div class=\"pure-u-1-1 atomo-symbolized\">"
         + "Symbolized: " + symbolized_word_list
         + "</div>"
         + "<div class=\"pure-u-1-1 atomo-slack\">"
-        + "Slack emoji: " + slackemoji_list
-        + " <button class=\"pure-button\" onClick=\"copyToClipboard('" + slackemoji_list + "');\">Copy Text</button>"
+        + "Slack emoji: <input id=\"atomo-slack-" + symbolized_word_list + "\" class=\"atomo-slack-input\" type=\“text\“ value=\"" + slackemoji_list + "\">"
+        + " <button class=\"pure-button\" onClick=\"copyToClipboard('atomo-slack-" + symbolized_word_list + "');\">Copy Text</button>"
         + "</div>"
         + "<div class=\"pure-u-1-1 atomo-image\">"
         //+ "<img src='img.php?s=" + JSON.stringify(symbolList) + "&w=" + imgWidth + "' alt='"+symbolized_word+"'>"
@@ -117,8 +128,10 @@ function atomoComposeImage() {
 
 function atomoSaveWord(word) {
     var selectedWordList = document.getElementById("atomo-"+word);
-    atomoSearchResultJSON [ word ][ "selected" ] = selectedWordList.options[selectedWordList.selectedIndex].value
-    atomoSelectedWords[word] = selectedWordList.options[selectedWordList.selectedIndex].value;
+    var createButton = document.getElementById("atomo-create");
+    atomoSearchResultJSON [ "query_components" ][ word ][ "selected" ] = selectedWordList.options[selectedWordList.selectedIndex].value
+    atomoSelectedWords [word] = selectedWordList.options[selectedWordList.selectedIndex].value;
+    createButton.classList.remove("pure-button-disabled");
 }
 
 function httpGetAsync(theUrl, callback) {
@@ -131,7 +144,6 @@ function httpGetAsync(theUrl, callback) {
     }
 
     xmlHttp.open("GET", theUrl, true); // true for asynchronous
-    xmlHttp.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     xmlHttp.send(null);
 }
 
