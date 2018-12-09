@@ -1,17 +1,17 @@
 <?php
 // Database credentials
-define("DBSERVERNAME", "");
-define("DBDATABASE",   "");
-define("DBUSERNAME",   "");
-define("DBPASSWORD".   "");
+const DBSERVERNAME = "";
+const DBDATABASE   = "";
+const DBUSERNAME   = "";
+const DBPASSWORD   = "";
 
-// Source of Element image file
-define("SOURCEELEMENTPATH", __DIR__ . DIRECTORY_SEPARATOR . "");
-define("SOURCEELEMENTWIDTH", 512);
+// source of Elements image
+const SOURCEELEMENTPATH  = "/path/to/image";
+const SOURCEELEMENTWIDTH = 0;
 
 // Deployment PROD or DEV
-define("DEPLOY", "DEV");
+const DEPLOY = "DEV";
 
 // ipstack key (https://ipstack.com/)
-define("IPSTACK", "");
+const IPSTACK = "access_token";
 ?>

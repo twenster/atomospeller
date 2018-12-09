@@ -19,11 +19,6 @@
                     <input type="text" id="word" name="word" class="atomo-word">
                     <button onclick="atomoSpell()" id="lookup" class="pure-button pure-button-primary atomo-lookup">Look up</button>
                 </div>
-                <!-- div class="pure-u-1-1 pure-menu pure-menu-horizontal atomo-form-options">
-                    <ul class="pure-menu-list">
-                        <li class="pure-menu-item"><input type="radio" id="length_all" name="length" value="0" checked><label for="length_all">All</label></li>
-                        <li class="pure-menu-item"><input type="radio" id="length_shortest" name="length" value="1"><label for="length_shortest">Shortest</label></li>
-                </div -->
             </div>
             <div id="atomo-search-result" class="pure-g atomo-results-wrapper">
             </div>

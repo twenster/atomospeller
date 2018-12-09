@@ -4,7 +4,7 @@
  */
 
 // Variables
-require("config.php");
+require 'config.php';
 
 // DB Connect
 $db = connectDB();

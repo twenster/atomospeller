@@ -1,55 +1,110 @@
 <?PHP
-function composeImage($requestedElementList, $requestedElementWidth) {
-    // Create the final image canvas.
-    // We will copy/merge image to this new image and build a word
-    $wordImage = imagecreatetruecolor(count($requestedElementList) * SOURCEELEMENTWIDTH, SOURCEELEMENTWIDTH);
-
-    // Transparent background (PNG)
-    imagesavealpha($wordImage, true);
-    $trans_colour = imagecolorallocatealpha($wordImage, 0, 0, 0, 127);
-    imagefill($wordImage, 0, 0, $trans_colour);
-
-    // Compose the new image,
-    // Adds each element from the array to the image canvas
+function composeImage($symbolList, $elementWidth, $wordDisplay) {
+    $numberOfElement = 0;
+    $wordSpacing = 20;
+    $elementStartPositionX = 0;
+    $elementStartPositionY = 0;
     $dbElementList = getElementsFromDB();
     $dbSymbolList = getSymbolsFromDB();
-    foreach ($requestedElementList as $elementPosition => $requestedElement) {
-        $symbolId = array_searchi($requestedElement, $dbSymbolList);
+    $wordList = explode(",", $symbolList);
+    $longestWordLength = 0;
 
-        // if the requestedElement exists in the Element from the database,
-        // We load the image file, or we create an empty one
-        if ( $symbolId ) {
-            $sourceElementFilename = substr( "00" . $dbElementList[$symbolId]["number"], -3) . "atomo" . strtolower($dbElementList[$symbolId]["symbol"]) . "256.png";
-            $requestedElementImage = @imagecreatefrompng(SOURCEELEMENTPATH.$sourceElementFilename);
-        } else {
-            $requestedElementImage = createLocalImage( array(
-                "symbol" => "XX",
-                "name" => "Unknown",
-                "number" => 0
-                )
-            );
-        }
+    if ( ($elementWidth == 0) || ($elementWidth == "") || ($elementWidth == "undefined"))
+        $elementWidth = SOURCEELEMENTWIDTH;
 
-        // copy the element image to our own image.
-        // in this case imagecopymerge() = imagecopy() because of the last parameter = 100
-        $r = imagecopymerge($wordImage, $requestedElementImage, $elementPosition * SOURCEELEMENTWIDTH, 0, 0, 0, SOURCEELEMENTWIDTH, SOURCEELEMENTWIDTH, 100);
+    /*
+     * Transform URI argumets Ni-Ce,Na-Ce into arrays
+     * $wordElement[0] = [Ni, Ce]
+     * $wordElement[1] = [Na, Ce]
+     */
+    foreach ($wordList as $wordPosition => $thisWord) {
+        $wordElement [$wordPosition] = explode("-",$thisWord);
+        $numberOfElement += count($wordElement [$wordPosition]);
+        $longestWordLength = ($longestWordLength < count($wordElement [$wordPosition])) ? count($wordElement [$wordPosition]) : $longestWordLength;
     }
 
-    // Resize the image to the size given in the URL
-    $wordImageScaled = imagescale($wordImage, count($requestedElementList) * $requestedElementWidth, $requestedElementWidth, IMG_BICUBIC);
 
-    header('Content-type:image/png');
-    header('Content-Disposition: inline; filename="AtOMo-' . implode($requestedElementList) . '.png"');
-    imagepng($wordImageScaled);
-    //imagepng($wordImage);
+    /*
+     * Create the final image canvas.
+     * We will copy/merge image to this new image and build a word
+     */
+    if ($wordDisplay == "left") {
+        $wordCanvas = imagecreatetruecolor( $longestWordLength * SOURCEELEMENTWIDTH, count($wordList) * SOURCEELEMENTWIDTH + (count($wordList)-1) * $wordSpacing);
+    } else { // inline
+        $wordCanvas = imagecreatetruecolor( ($numberOfElement * SOURCEELEMENTWIDTH) + ( (count($wordList) - 1) * $wordSpacing ), SOURCEELEMENTWIDTH);
+    }
 
-    imagedestroy($wordImage);
-    imagedestroy($wordImageScaled);
+    // Transparent background (PNG)
+    imagesavealpha($wordCanvas, true);
+    $trans_colour = imagecolorallocatealpha($wordCanvas, 0, 0, 0, 127);
+    imagefill($wordCanvas, 0, 0, $trans_colour);
 
+    /*
+     * Compose the new image,
+     * Adds each element from the array to the image canvas
+     */
+    foreach ($wordList as $wordPosition => $thisWord) {
+        foreach ($wordElement [$wordPosition] as $elementPosition => $requestedElement) {
+            $symbolId = array_searchi($requestedElement, $dbSymbolList);
+
+            // if the requestedElement exists in the Element from the database,
+            // We load the image file, or we create an empty one
+            if ( $symbolId ) {
+                $sourceElementFilename = substr( "00" . $dbElementList[$symbolId]["number"], -3) . "atomo" . strtolower($dbElementList[$symbolId]["symbol"]) . "256.png";
+                $requestedElementImage = @imagecreatefrompng(SOURCEELEMENTPATH.$sourceElementFilename);
+            } else {
+                $requestedElementImage = createLocalImage( array(
+                    "symbol" => "XX",
+                    "name" => "Unknown",
+                    "number" => 0
+                    )
+                );
+            }
+
+            /*
+             * Copy the element image to our own image.
+             * in this case imagecopymerge() = imagecopy() because of the last parameter = 100
+             */
+            //$r = imagecopymerge($wordCanvas, $requestedElementImage, $elementPosition * SOURCEELEMENTWIDTH, 0, 0, 0, SOURCEELEMENTWIDTH, SOURCEELEMENTWIDTH, 100);
+            $r = imagecopymerge($wordCanvas, $requestedElementImage, $elementStartPositionX + ($elementPosition * SOURCEELEMENTWIDTH), $elementStartPositionY, 0, 0, SOURCEELEMENTWIDTH, SOURCEELEMENTWIDTH, 100);
+        }
+        // Saving the size of the current word for the x position of the next word
+
+        if ($wordDisplay == "left") {// words are left aligned
+            $elementStartPositionX = 0;
+            $elementStartPositionY += $wordSpacing + SOURCEELEMENTWIDTH;
+        } else { // default = inline
+            $elementStartPositionX += $wordSpacing + count($wordElement [$wordPosition]) * SOURCEELEMENTWIDTH;
+            $elementStartPositionY = 0;
+        }
+    }
+
+    /*header('Content-type:image/png');
+    header('Content-Disposition: inline; filename="AtOMo-' . implode($wordList) . '.png"');
+    imagepng($wordCanvas);
+
+    imagedestroy($wordCanvas);
+    */
+    return $wordCanvas;
 }
 
+/*
+ * send image back to the browser
+ */
+function displayImage($symbolList, $wordCanvas) {
+    $wordList = explode(",", $symbolList);
+
+    header('Content-type:image/png');
+    header('Content-Disposition: inline; filename="AtOMo-' . implode($wordList) . '.png"');
+    imagepng($wordCanvas);
+
+    imagedestroy($wordCanvas);
+}
+
+/*
+ * Creates a default image element
+ */
 function createLocalImage($info) {
-    print_r($info);
     $BOX_WIDTH = 80;
     $BOX_HEIGHT = 80;
     $SYMBOL_SIZE = 25;

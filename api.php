@@ -1,7 +1,8 @@
 <?php
-require("functions.php");
-require("stoichiograph.php");
-require("foundry.php");
+require 'functions.php';
+require 'stoichiograph.php';
+require 'foundry.php';
+//require'stats.php';
 
 // very old
 //$request = explode("/", substr(@$_SERVER['PATH_INFO'], 1));
@@ -16,12 +17,18 @@ switch ($method) {
         break;
 
     case 'POST':
-        $postArgs = filter_input_array(INPUT_POST);
+        $postArgs = filter_input_array(INPUT_POST); // application/x-www-form-urlencoded
+        if ($postArgs == "") { // application/json
+            $postArgs = json_decode(file_get_contents("php://input"), TRUE);
+        }
         switchTab($postArgs);
         break;
 
     case 'GET':
-        $getArgs = filter_input_array(INPUT_GET);
+        $getArgs = filter_input_array(INPUT_GET); // application/x-www-form-urlencoded
+        if ($getArgs == "") { // application/json
+            $getArgs = json_decode(file_get_contents("php://input"), TRUE);
+        }
         switchTab($getArgs);
         break;
 
@@ -37,9 +44,13 @@ function switchTab($formArgs) {
             break;
 
         case 'image':
-            doFoundry($formArgs["s"], $formArgs["w"]);
+            doFoundry($formArgs["s"], $formArgs["w"], $formArgs["d"]);
             break;
 
+        /*case 'stats':
+            doStat();
+            break;
+        */
         default:
             break;
     }
@@ -48,15 +59,13 @@ function switchTab($formArgs) {
 
 function doSearch($wordQuery) {
     if ( ($wordQuery != null) || ($wordQuery !='') )
-        spellWord($wordQuery);
+        doSpell($wordQuery);
 }
 
-function doFoundry($symbolList, $symbolHeight) {
+function doFoundry($symbolList, $elementWidth, $wordDisplay) {
     if ($symbolList != null) {
-        $symbolList = json_decode( $symbolList );
-        if ( ($symbolHeight == 0) || ($symbolHeight == "") )
-            $symbolHeight = 128;
-        composeImage($symbolList, $symbolHeight);
+        $wordCanvas = composeImage($symbolList, $elementWidth, $wordDisplay);
+        displayImage($symbolList, $wordCanvas);
     }
 }
 ?>
