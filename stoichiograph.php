@@ -85,9 +85,9 @@ class Graph {
         /* Print a string to stdout that can be piped to Graphviz to
         generate a graph diagram.
         */
-        print('digraph G {\n');
-        print('    graph [rankdir=LR];\n');
-        print('    node [width=0.75 shape=circle];\n');
+        echo 'digraph G {\n';
+        echo '    graph [rankdir=LR];\n';
+        echo '    node [width=0.75 shape=circle];\n';
 
         /*$edges = [
             (p, c)
@@ -148,7 +148,7 @@ $spelled_words = array(
 )
 */
 
-function spellWord($wordQuery) {
+function doSpell($wordQuery) {
     global $processed, $graphList;
     $words = preg_replace('/[\W]+/', '', explode(' ', $wordQuery));
 
@@ -159,7 +159,7 @@ function spellWord($wordQuery) {
     foreach ($words as $word_key => $word) {
         $processed = array();
         $graphList[$word_key] = new Graph;
-        $spellingList[$word_key] = spell($word_key, $word);
+        $spellingList[$word_key] = buildGraph($word_key, $word);
     }
 
     /*
@@ -202,7 +202,7 @@ function spellWord($wordQuery) {
     $spelled_words_json = json_encode($spelled_words);
 
     header('Content-Type: application/json');
-    print($spelled_words_json);
+    echo $spelled_words_json;
 }
 
 /*
@@ -215,7 +215,7 @@ function spellWord($wordQuery) {
     );
 */
 
-function spell($word_key, $word) {
+function buildGraph($word_key, $word) {
     global $graphList;
 
     /*
