@@ -137,7 +137,7 @@ h2.title {
 
 .atomo-page-wrapper {
   margin: 0 auto;
-  max-width: 1200px; }
+  max-width: 800px; }
 
 .atomo-header-wrapper {
   text-align: center;
@@ -163,34 +163,53 @@ h2.title {
 
 .atomo-results-wrapper {
   margin: 1em 0; }
-  .atomo-results-wrapper .atomo-table-select {
+
+.atomo-select {
+  border: 1px solid #dadada;
+  padding: 1em;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1); }
+  .atomo-select .atomo-table-select {
     display: inline-block;
     margin-right: 1em;
     vertical-align: top; }
-  .atomo-results-wrapper .atomo-table-button {
+    .atomo-select .atomo-table-select td {
+      vertical-align: top; }
+    .atomo-select .atomo-table-select label {
+      margin-left: 0.125em; }
+    .atomo-select .atomo-table-select .atomo-symbol {
+      background-color: #dadada;
+      border: 1px solid silver;
+      display: inline-block;
+      margin: 0 0.125em 0.125em 0;
+      padding: 0.125em;
+      width: 2em; }
+  .atomo-select .atomo-table-button {
     display: inline-block;
     margin-right: 1em;
     vertical-align: top; }
-  .atomo-results-wrapper .atomo-select {
+  .atomo-select .atomo-select {
     border: none; }
-  .atomo-results-wrapper .atomo-results {
+  .atomo-select .atomo-results {
     margin: 1em; }
 
 .atomo-result {
-  border: 1px solid silver;
-  padding: 1em; }
-
-.atomo-symbolized {
-  margin: 0.5em 0; }
-
-.atomo-slack {
-  margin: 0.5em 0; }
-
-.atomo-slack-input {
-  padding: 0.5em 1em; }
-
-.atomo-image {
-  margin: 0.5em 0; }
+  border: 1px solid #dadada;
+  padding: 1em;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1); }
+  .atomo-result .atomo-label {
+    padding-right: 1em;
+    text-align: right; }
+  .atomo-result .atomo-symbolized {
+    margin: 0.5em 0; }
+  .atomo-result .atomo-slack {
+    margin: 0.5em 0; }
+  .atomo-result .atomo-slack-input {
+    padding: 0.5em 1em; }
+  .atomo-result .atomo-image {
+    margin: 0.5em 0; }
+    .atomo-result .atomo-image img {
+      max-height: 100px;
+      max-width: 100%; }
 
 .atomo-disclaimer {
   background-color: #eeeeee;

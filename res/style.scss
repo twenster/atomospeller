@@ -46,11 +46,32 @@
 
 .atomo-results-wrapper {
     margin: 1em 0;
+}
+
+.atomo-select {
+    border: 1px solid $greyLighter;
+    padding: 1em;
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 
     .atomo-table-select {
         display: inline-block;
         margin-right: 1em;
         vertical-align: top;
+
+        td {
+            vertical-align: top;
+        }
+        label {
+            margin-left: 0.125em;
+        }
+        .atomo-symbol {
+            background-color: $greyLighter;
+            border: 1px solid $greyLight;
+            display: inline-block;
+            margin: 0 0.125em 0.125em 0;
+            padding: 0.125em;
+            width: 2em;
+        }
     }
     .atomo-table-button {
         display: inline-block;
@@ -66,23 +87,31 @@
 }
 
 .atomo-result {
-    border: 1px solid $greyLight;
+    border: 1px solid $greyLighter;
     padding: 1em;
-}
-.atomo-symbolized {
-    margin: 0.5em 0;
-}
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 
-.atomo-slack {
-    margin: 0.5em 0;
-}
+    .atomo-label {
+        padding-right: 1em;
+        text-align: right;
+    }
+    .atomo-symbolized {
+        margin: 0.5em 0;
+    }
+    .atomo-slack {
+        margin: 0.5em 0;
+    }
+    .atomo-slack-input {
+        padding: 0.5em 1em;
+    }
+    .atomo-image {
+        margin: 0.5em 0;
 
-.atomo-slack-input {
-    padding: 0.5em 1em;
-}
-
-.atomo-image {
-    margin: 0.5em 0 ;
+        img {
+            max-height: 100px;
+            max-width: 100%;
+        }
+    }
 }
 
 .atomo-disclaimer {
