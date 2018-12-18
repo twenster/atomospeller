@@ -157,7 +157,8 @@ h2.title {
   .atomo-form-wrapper .atomo-form {
     display: inline-block; }
     .atomo-form-wrapper .atomo-form .atomo-word {
-      font-size: 1.6em; }
+      font-size: 1.6em;
+      display: inline-block; }
     .atomo-form-wrapper .atomo-form .atomo-lookup {
       font-size: 1.6em; }
 
@@ -168,25 +169,43 @@ h2.title {
   border: 1px solid #dadada;
   padding: 1em;
   box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1); }
-  .atomo-select .atomo-table-select {
-    display: inline-block;
-    margin-right: 1em;
+  @media screen and (max-width: 767px) {
+    .atomo-select {
+      /* grid = md */ }
+      .atomo-select .atomo-select-block {
+        display: block; } }
+  @media screen and (min-width: 768px) {
+    .atomo-select {
+      /* grid = md */ }
+      .atomo-select .atomo-select-block {
+        display: inline-block; } }
+  .atomo-select .atomo-select-block {
+    box-shadow: 1px 1px 2px 1px rgba(255, 196, 13, 0.1) inset;
+    border-left: 1px solid #FFC40D;
+    border-top: 1px solid #FFC40D;
+    border-radius: 4px;
+    margin: 0.5em;
     vertical-align: top; }
-    .atomo-select .atomo-table-select td {
+    .atomo-select .atomo-select-block .atomo-select-header {
+      font-weight: bold;
+      padding: .5em 1em;
+      vertical-align: bottom; }
+    .atomo-select .atomo-select-block .atomo-select-body {
+      padding: .5em 1em;
       vertical-align: top; }
-    .atomo-select .atomo-table-select label {
+    .atomo-select .atomo-select-block label {
       margin-left: 0.125em; }
-    .atomo-select .atomo-table-select .atomo-symbol {
+    .atomo-select .atomo-select-block .atomo-symbol {
       background-color: #dadada;
       border: 1px solid silver;
       display: inline-block;
       margin: 0 0.125em 0.125em 0;
       padding: 0.125em;
       width: 2em; }
-  .atomo-select .atomo-table-button {
-    display: inline-block;
-    margin-right: 1em;
-    vertical-align: top; }
+  .atomo-select .atomo-select-button {
+    display: block;
+    margin: 1em;
+    text-align: right; }
   .atomo-select .atomo-select {
     border: none; }
   .atomo-select .atomo-results {
@@ -197,8 +216,18 @@ h2.title {
   padding: 1em;
   box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1); }
   .atomo-result .atomo-label {
-    padding-right: 1em;
-    text-align: right; }
+    font-weight: bold;
+    padding-right: 1em; }
+  @media screen and (max-width: 767px) {
+    .atomo-result {
+      /* grid = md */ }
+      .atomo-result .atomo-label {
+        text-align: left; } }
+  @media screen and (min-width: 768px) {
+    .atomo-result {
+      /* grid = md */ }
+      .atomo-result .atomo-label {
+        text-align: right; } }
   .atomo-result .atomo-symbolized {
     margin: 0.5em 0; }
   .atomo-result .atomo-slack {
@@ -208,7 +237,7 @@ h2.title {
   .atomo-result .atomo-image {
     margin: 0.5em 0; }
     .atomo-result .atomo-image img {
-      max-height: 100px;
+      max-height: 128px;
       max-width: 100%; }
 
 .atomo-disclaimer {
