@@ -1,7 +1,7 @@
 <?PHP
 function composeImage($symbolList, $elementWidth, $wordDisplay) {
     $numberOfElement = 0;
-    $wordSpacing = 20;
+    $wordSpacing = 40;
     $elementStartPositionX = 0;
     $elementStartPositionY = 0;
     $dbElementList = getElementsFromDB();
