@@ -58,8 +58,10 @@ function switchTab($formArgs) {
 }
 
 function doSearch($wordQuery) {
-    if ( ($wordQuery != null) || ($wordQuery !='') )
-        doSpell($wordQuery);
+    if ( ($wordQuery != null) || ($wordQuery !='') ) {
+        $spelled_words_json = doSpell($wordQuery);
+        displaySpelledWords($spelled_words_json);
+    }
 }
 
 function doFoundry($symbolList, $elementWidth, $wordDisplay) {
