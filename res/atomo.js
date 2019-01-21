@@ -138,16 +138,10 @@ function atomoComposeImage() {
 
 }
 
-function atomoSaveWord(word) {
-    var selectedWordList = document.getElementById("atomo-"+word);
-    //var createButton = document.getElementById("atomo-create");
-    atomoSearchResultJSON [ "query_components" ][ word ][ "selected" ] = selectedWordList.options[selectedWordList.selectedIndex].value
-    atomoSelectedWords [word] = selectedWordList.options[selectedWordList.selectedIndex].value;
-    //createButton.classList.remove("pure-button-disabled");
-}
-
 function httpGetAsync(theUrl, callback) {
     var xmlHttp = new XMLHttpRequest();
+
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
 
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status == 200) { // XMLHttpRequest.DONE = 4
@@ -155,21 +149,21 @@ function httpGetAsync(theUrl, callback) {
         }
     }
 
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous
     xmlHttp.send(null);
 }
 
 function httpPostAsync(theUrl, theParameters, callback) {
     var xmlHttp = new XMLHttpRequest();
 
+    xmlHttp.open("POST", theUrl, true); // true for asynchronous
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status == 200) { // XMLHttpRequest.DONE = 4
             callback(xmlHttp.responseText);
         }
     }
 
-    xmlHttp.open("POST", theUrl, true); // true for asynchronous
-    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     xmlHttp.send(theParameters);
 }
 
