@@ -37,6 +37,7 @@
 
         .atomo-word {
             font-size: 1.6em;
+            display: inline-block;
         }
         .atomo-lookup {
             font-size: 1.6em;
@@ -53,12 +54,32 @@
     padding: 1em;
     box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 
-    .atomo-table-select {
-        display: inline-block;
-        margin-right: 1em;
+    @media screen and (max-width: 767px) { /* grid = md */
+        .atomo-select-block {
+            display: block;
+        }
+    }
+    @media screen and (min-width: 768px) { /* grid = md */
+        .atomo-select-block {
+            display: inline-block;
+        }
+    }
+
+    .atomo-select-block {
+        box-shadow: 1px 1px 2px 1px rgba(255, 196, 13, 0.1) inset;
+        border-left: 1px solid $yellow;
+        border-top: 1px solid $yellow;
+        border-radius: 4px;
+        margin: 0.5em;
         vertical-align: top;
 
-        td {
+        .atomo-select-header {
+            font-weight: bold;
+            padding: .5em 1em;
+            vertical-align: bottom;
+        }
+        .atomo-select-body {
+            padding: .5em 1em;
             vertical-align: top;
         }
         label {
@@ -73,10 +94,10 @@
             width: 2em;
         }
     }
-    .atomo-table-button {
-        display: inline-block;
-        margin-right: 1em;
-        vertical-align: top;
+    .atomo-select-button {
+        display: block;
+        margin: 1em;
+        text-align: right;
     }
     .atomo-select {
         border: none;
@@ -92,8 +113,18 @@
     box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.1);
 
     .atomo-label {
+        font-weight: bold;
         padding-right: 1em;
-        text-align: right;
+    }
+    @media screen and (max-width: 767px) { /* grid = md */
+        .atomo-label {
+            text-align: left;
+        }
+    }
+    @media screen and (min-width: 768px) { /* grid = md */
+        .atomo-label {
+            text-align: right;
+        }
     }
     .atomo-symbolized {
         margin: 0.5em 0;
@@ -108,7 +139,7 @@
         margin: 0.5em 0;
 
         img {
-            max-height: 100px;
+            max-height: 128px;
             max-width: 100%;
         }
     }

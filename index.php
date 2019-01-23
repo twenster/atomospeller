@@ -3,6 +3,7 @@
     <head>
         <title>At O Mo speller</title>
         <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
         <link rel="stylesheet" href="res/style.css">
     </head>
     <body onload="">
@@ -16,8 +17,8 @@
             </div>
             <div class="pure-g atomo-form-wrapper">
                 <div class="pure-u-1-1 pure-form atomo-form">
-                    <input type="text" id="word" name="word" class="atomo-word">
-                    <button onclick="atomoSpell()" id="lookup" class="pure-button pure-button-primary atomo-lookup">Look up</button>
+                    <input type="text" id="atomo-query" name="atomo-query" class="atomo-word">
+                    <button onclick="atomoSearch()" id="atomo-search-button" class="pure-button pure-button-primary atomo-lookup">Search</button>
                 </div>
             </div>
             <div id="atomo-search-result" class="pure-g atomo-results-wrapper">

@@ -199,8 +199,10 @@ function doSpell($wordQuery) {
         // save each words for statistics
         setLog($words[$word_key]);
     }
-    $spelled_words_json = json_encode($spelled_words);
+    return json_encode($spelled_words);
+}
 
+function displaySpelledWords($spelled_words_json) {
     header('Content-Type: application/json');
     echo $spelled_words_json;
 }
